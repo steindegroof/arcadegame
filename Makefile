@@ -17,7 +17,7 @@ CPPFLAGS += -isystem $(GTEST_DIR)/include
 
 OBJS =		parsers/AbstractParser.o parsers/FieldParser.o tinyxml/tinyxml.o tinyxml/tinystr.o tinyxml/tinyxmlerror.o tinyxml/tinyxmlparser.o arcade.o
 SRCS =		arcademain.cpp #arcadetests.cpp
-TARGET =	arcademain #arcadetests
+TARGET =	arcademain arcadetests
 
 #--- primary target
 .PHONY : all
