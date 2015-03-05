@@ -5,6 +5,7 @@
 #include <vector>
 #include "DesignByContract.h"
 
+//klassse obstakel
 class Obstacle{
 protected:
 	Obstacle* _initCheck;
