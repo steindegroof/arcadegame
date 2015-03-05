@@ -3,9 +3,18 @@
 
 #include <string>
 #include <vector>
-#include "DesignByContract.h"
 
-//klassse obstakel
+class Move{ //properlyini enzo
+private:
+    std::string playername;
+    std::string direction;
+public: //setters?
+    Move();
+    Move(std::string,std::string);
+    std::string getPlayerName();
+    std::string getDirection();
+};
+
 class Obstacle{
 protected:
 	Obstacle* _initCheck;
@@ -58,6 +67,10 @@ private:
 	std::vector<Obstacle> obstacles;
 	std::vector<Player> players;
 public:
+/**omschrijving: zoek het object dat je wil bewegen,
+*   
+**/
+    bool doMove(Move&);
 /**
 ENSURE(properlyInitialized(), "constructor must end in properlyInitialized state");
 */

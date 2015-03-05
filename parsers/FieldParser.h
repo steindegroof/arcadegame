@@ -6,8 +6,6 @@
 #include "../tinyxml/tinyxml.h"
 
 
-using namespace std;
-
 /*
  * \class FieldParser
  * This Parser is a subclass of an AbstractParser, it can therefore load any XML file.
@@ -25,7 +23,9 @@ public:
 	 * This method expects the TiXmlElement that is passed as a parameter to represent an entire catalog of CDs.
 	 * It will then parse said catalog and return it as a pointer to a vector of CD*'s.
 	 */
-	Field* parseField(TiXmlElement* elem);
+	void parseFile(TiXmlElement* elem);
+	
+	bool writeFile(std::string filename);
 
 	/*
 	 * Returns a pointer to the parsed vector of CD*'s

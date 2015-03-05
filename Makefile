@@ -51,9 +51,9 @@ gtest_main.a : gtest-all.o gtest_main.o
 #--- compiler targets
 arcademain : $(OBJS) arcademain.cpp
 	$(CXX) $(CXXFLAGS) -o $@ $^
-
+#-lpthread
 arcadetests : $(OBJS) arcadetests.o gtest_main.a
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread -o $@ $^
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -o $@ $^ -lpthread
 
 arcadetests.o : arcadetests.cpp $(GTEST_HEADERS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c arcadetests.cpp

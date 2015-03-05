@@ -36,6 +36,10 @@ public:
  * \pre AbstractParser must be initialized when calling loadFile.
  */
 	bool loadFile(std::string filename);
+	
+	virtual void parseFile(TiXmlElement*) = 0;
+	
+	virtual bool writeFile(std::string filename) = 0;
 /**
  * Returns name of the root.
  * \pre AbstractParser must be initialized when calling getRootName.
