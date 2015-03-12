@@ -4,25 +4,35 @@
 #include <string>
 #include <vector>
 
-class Move{ //properlyini enzo
+class Move{ 
 private:
+    Move* _initCheck;
     std::string playername;
     std::string direction;
-public: //setters?
+public:
+    /**
+    * \post Constructor must end in properlyInitialized state 
+    */
     Move();
     Move(std::string,std::string);
+    bool properlyInitialized();
     std::string getPlayerName();
     std::string getDirection();
 };
 
-class PlayPiece{ //masterclass
+class PlayPiece{ 
 protected:
+    PlayPiece* _initCheck;
     int x;
     int y;
     bool movable;
 public:
+    /**
+    * \post Constructor must end in properlyInitialized state 
+    */
     PlayPiece();
     PlayPiece(int,int,bool);
+    bool properlyInitialized();
 };
 
 class Player:public PlayPiece{
@@ -30,37 +40,44 @@ private:
 	Player* _initCheck;
 	std::string name;
 public:
-/**
-* \post Constructor must end in properlyInitialized state
-ENSURE(properlyInitialized(), "constructor must end in properlyInitialized state");
-*/
-	Player();
-	bool properlyInitialized();
+    /**
+    * \post Constructor must end in properlyInitialized state 
+    */
+    Player();
+    Player(int, int, std::string);
+    bool properlyInitialized();
 };
 
 class Obstacle:public PlayPiece{
 protected:
 	Obstacle* _initCheck;
-	std::string type;
 public:
-/**
-ENSURE(properlyInitialized(), "constructor must end in properlyInitialized state");
-*/
-	Obstacle();
-	bool properlyInitialized();
+    /**
+    * \post Constructor must end in properlyInitialized state 
+    */
+    Obstacle();
+    bool properlyInitialized();
 	
 };
 
 class Barrel:public Obstacle{
 private:
 public:
-	Barrel();
+    /**
+    * \post Constructor must end in properlyInitialized state 
+    */
+    Barrel();
+    Barrel(int, int);
 };
 
 class Wall:public Obstacle{
 private:
 public:
-	Wall();
+    /**
+    * \post Constructor must end in properlyInitialized state 
+    */
+    Wall();
+    Wall(int, int);
 };
 
 class Field{
@@ -73,16 +90,18 @@ private:
 	std::vector<Obstacle> obstacles;
 	std::vector<Player> players;
 public:
-/**omschrijving: zoek het object dat je wil bewegen,
-*   
-**/
-    bool doMove(Move&);
-/**
-ENSURE(properlyInitialized(), "constructor must end in properlyInitialized state");
-*/
+        /**
+        * \post Constructor must end in properlyInitialized state 
+        */
 	Field();
 	Field(std::string,const int,const int);
 	bool properlyInitialized();
+        /** 
+        * \brief verplaats een playpieve volgens de opgegeven move.
+        * \param[in]	move	De te maken move
+	* \param[out]   succes	Geeft weer of de move gelukt is
+        **/
+        bool doMove(Move&);
 };
 
 #endif

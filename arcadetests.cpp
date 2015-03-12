@@ -31,14 +31,45 @@ you don't have to provide it.
 /**
 Declares the variables your tests want to use.
 */
-	Obstacle obstacle;
+        Move move;
+        PlayPiece playpiece;
+        Obstacle obstacle;
+        Barrel barrel;
+        Wall wall;
+        Player player;
+        Field field;
+
 
 };
 
 /**
-Tests the default constructor.
+Tests the default constructors.
 */
+TEST_F(ArcadeTest, MoveConstructor) {
+	EXPECT_TRUE(move.properlyInitialized());
+	// verify post-condition
+}
 TEST_F(ArcadeTest, ObstacleConstructor) {
+	EXPECT_TRUE(obstacle.properlyInitialized());
+	// verify post-condition
+}
+TEST_F(ArcadeTest, PlayPieceConstructor) {
+	EXPECT_TRUE(playpiece.properlyInitialized());
+	// verify post-condition
+}
+TEST_F(ArcadeTest, BarrelConstructor) {
+	EXPECT_TRUE(barrel.properlyInitialized());
+	// verify post-condition
+}
+TEST_F(ArcadeTest, wallConstructor) {
+	EXPECT_TRUE(wall.properlyInitialized());
+	// verify post-condition
+}
+TEST_F(ArcadeTest, PlayerConstructor) {
+	EXPECT_TRUE(player.properlyInitialized());
+	// verify post-condition
+}
+TEST_F(ArcadeTest, FieldConstructor) {
 	EXPECT_TRUE(obstacle.properlyInitialized());
 	// verify post-condition
 }

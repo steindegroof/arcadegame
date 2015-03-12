@@ -11,7 +11,7 @@ GTEST_HEADERS = $(GTEST_DIR)/include/gtest/*.h \
 
 
 
-CXXFLAGS =	-O2 -g -Wall -fmessage-length=0 -fomit-frame-pointer -pipe -I$(INCL) 
+CXXFLAGS =	-O2 -g -Wall -fmessage-length=0 -fomit-frame-pointer -pipe -std=c++11 -I$(INCL) 
 CPPFLAGS += -MD -MP 
 CPPFLAGS += -isystem $(GTEST_DIR)/include
 
