@@ -12,7 +12,7 @@
  * and remembers the first element (aka the root) in that document.
  */
 class AbstractParser {
-private:
+protected:
 	TiXmlElement * root;
 	TiXmlDocument doc;
 public:
@@ -37,7 +37,7 @@ public:
  */
 	bool loadFile(std::string filename);
 	
-	virtual void parseFile(TiXmlElement*) = 0;
+	virtual void parseFile() = 0;
 	
 	virtual bool writeFile(std::string filename) = 0;
 /**

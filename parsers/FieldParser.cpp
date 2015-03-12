@@ -1,5 +1,6 @@
 #include "FieldParser.h"
 
+
 FieldParser::FieldParser() {
 	field = new Field();
 }
@@ -7,11 +8,11 @@ FieldParser::FieldParser() {
 FieldParser::~FieldParser() {
 }
 
-void FieldParser::parseFile(TiXmlElement* elem) {
+void FieldParser::parseFile() { //elem zal de root zijn van xml file
 	//code veranderen
-	REQUIRE(this->getRootName() == "VELD", "Rootname must be equal to 'VELD'");
-	for(TiXmlElement* e = elem->FirstChildElement(); e != NULL; e = e->NextSiblingElement()){
-		
+	//REQUIRE(this->getRootName() == "VELD", "Rootname must be equal to 'VELD'");
+	for(TiXmlElement* e = this->root->FirstChildElement(); e != NULL; e = e->NextSiblingElement()){
+	    std::string tag = e->Value();
 	}
 	//return catalog;
 }
