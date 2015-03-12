@@ -15,12 +15,32 @@ public: //setters?
     std::string getDirection();
 };
 
-class Obstacle{
+class PlayPiece{ //masterclass
+protected:
+    int x;
+    int y;
+    bool movable;
+public:
+    PlayPiece();
+    PlayPiece(int,int,bool);
+};
+
+class Player:public PlayPiece{
+private:
+	Player* _initCheck;
+	std::string name;
+public:
+/**
+* \post Constructor must end in properlyInitialized state
+ENSURE(properlyInitialized(), "constructor must end in properlyInitialized state");
+*/
+	Player();
+	bool properlyInitialized();
+};
+
+class Obstacle:public PlayPiece{
 protected:
 	Obstacle* _initCheck;
-	int x;
-	int y;
-	bool movable;
 	std::string type;
 public:
 /**
@@ -43,27 +63,13 @@ public:
 	Wall();
 };
 
-class Player{
-private:
-	Player* _initCheck;
-	std::string name;
-	int x;
-	int y;
-public:
-/**
-* \post Constructor must end in properlyInitialized state
-ENSURE(properlyInitialized(), "constructor must end in properlyInitialized state");
-*/
-	Player();
-	bool properlyInitialized();
-};
-
 class Field{
 private:
 	Field* _initCheck;
 	std::string name;
 	int length;
 	int width;
+	PlayPiece** playfield;
 	std::vector<Obstacle> obstacles;
 	std::vector<Player> players;
 public:
@@ -75,6 +81,7 @@ public:
 ENSURE(properlyInitialized(), "constructor must end in properlyInitialized state");
 */
 	Field();
+	Field(std::string,const int,const int);
 	bool properlyInitialized();
 };
 

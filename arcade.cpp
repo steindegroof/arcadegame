@@ -1,6 +1,6 @@
 #include "arcade.h"
 
-Field::Field(){
+PlayPiece::PlayPiece(){
 }
 
 Obstacle::Obstacle() {
@@ -13,6 +13,19 @@ Obstacle::Obstacle() {
 
 bool Obstacle::properlyInitialized() {
     return this == _initCheck;
+}
+
+Field::Field(){
+}
+
+Field::Field(std::string name,const int length,const int width){
+    this->name = name;
+    this->length = length;
+    this->width = width;
+    this->playfield = new PlayPiece*[length];
+    for(int i = 0; i < length; ++i){
+        this->playfield[i] = new PlayPiece[width];
+    }
 }
 
 /*
