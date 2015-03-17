@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 
+const std::vector<std::string> directions = {"OMHOOG", "OMLAAG", "LINKS", "RECHTS"};
+
 class Move{ 
 private:
     Move* _initCheck;
@@ -14,7 +16,13 @@ public:
     * \post Constructor must end in properlyInitialized state 
     */
     Move();
-    Move(std::string,std::string);
+    /**
+    * \post Constructor must end in properlyInitialized state 
+    */
+    /**
+    * \pre direction is one of: OMHOOG, LINKS, OMLAAG, RECHTS 
+    */
+    Move(std::string playername,std::string direction);
     bool properlyInitialized();
     std::string getPlayerName();
     std::string getDirection();
@@ -67,7 +75,13 @@ public:
     * \post Constructor must end in properlyInitialized state 
     */
     Barrel();
-    Barrel(int, int);
+    /**
+    * \post Constructor must end in properlyInitialized state 
+    */
+    /**
+    * \pre x > 0, y > 0
+    */
+    Barrel(int x, int y);
 };
 
 class Wall:public Obstacle{
