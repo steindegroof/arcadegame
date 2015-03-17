@@ -5,9 +5,8 @@
 /**
 * helper functions
 **/
-bool isDirection(std::string) {
-    return std::find(directions.begin(), directions.end(), "OMHOOG") 
-               != directions.end();
+bool isDirection(std::string direction) {
+    return directions.count(direction) != 0;
 }
 
 
@@ -47,6 +46,7 @@ PlayPiece::PlayPiece() {
 
 }
 PlayPiece::PlayPiece(int x, int y, bool movable) {
+    REQUIRE(x > 0 && y > 0, "coordinates must be greater than zero");
     _initCheck = this;
     this->x = x;
     this->y = y;
@@ -58,6 +58,25 @@ PlayPiece::PlayPiece(int x, int y, bool movable) {
 bool PlayPiece::properlyInitialized() {
     return this == _initCheck;
 }
+bool PlayPiece::isEmpty() {
+    return this->x == 0 && this->y == 0;
+}
+bool PlayPiece::isMovable() {
+    return this->movable;
+}
+int PlayPiece::getX() {
+    return this->x;
+} 
+int PlayPiece::getY() {
+    return this->y;
+} 
+void PlayPiece::setX(int x) {
+    this->x = x;
+}
+void PlayPiece::setY(int y) {
+    this->y = y;
+}
+
 /** 
 * Player
 **/
@@ -72,6 +91,7 @@ Player::Player() {
 
 }
 Player::Player(int x, int y, std::string name) {
+    REQUIRE(x > 0 && y > 0, "coordinates must be greater than zero");
     _initCheck = this;
     this->name = name;
     this->x = x;
@@ -136,7 +156,8 @@ Wall::Wall() {
            "constructor must end in properlyInitialized state");
 
 }
-Wall::Wall(int, int) {
+Wall::Wall(int x, int y) {
+    REQUIRE(x > 0 && y > 0, "coordinates must be greater than zero");
     _initCheck = this;
     this->x = x;
     this->y = y;
@@ -161,13 +182,16 @@ Field::Field(){
 }
 
 Field::Field(std::string name,const int length,const int width){
+    REQUIRE(name != "", "name must not be an empty string");
+    REQUIRE(length > 0 && width > 0,
+               "length and width must be greater than zero");
     _initCheck = this;
     this->name = name;
     this->length = length;
     this->width = width;
-    this->playfield = new PlayPiece*[length];
-    for(int i = 0; i < length; ++i){
-        this->playfield[i] = new PlayPiece[width];
+    this->playfield = new PlayPiece*[width];
+    for(int i = 0; i < width; ++i){
+        this->playfield[i] = new PlayPiece[length];
     }
     this->obstacles = {};
     this->players = {};
@@ -177,4 +201,51 @@ Field::Field(std::string name,const int length,const int width){
 bool Field::properlyInitialized() {
     return this == _initCheck;
 }
+bool Field::pushObstacle(Obstacle& obstacle, const std::string& direction) {
+    REQUIRE(isDirection(direction), "invalid direction");
+    if (!obstacle.isMovable()) {
+        return false;
+    }
+    int oldX = obstacle.getX();
+    int oldY = obstacle.getY();
+    std::pair<int,int> destination = this->getCoordinates(oldX, oldY,
+                                                           direction);
+    int newX = destination.first;
+    int newY = destination.second;
+    if (!this->hasCoordinates(newX, newY)) {
+        return false;
+    }
+    if (!this->isEmpty(newX, newY)) {
+        return false;
+    }
+    this->playfield[oldX][oldY] = this->playfield[newX][newY];
+    this->playfield[newX][newY] = obstacle;
+    obstacle.setX(newX);
+    obstacle.setY(newY);
+    return true;
 
+}
+bool Field::isEmpty(int x, int y) {
+    REQUIRE(this->hasCoordinates(x, y), "invalid coordinates");
+    if (this->playfield[x][y].isEmpty()) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+bool Field::hasCoordinates(int x, int y) {
+    if (x < 1 || y < 1 || x > this->width || y > this->length) {
+        return false;
+    }
+    else {
+        return true;
+    }
+}
+std::pair<int, int> Field::getCoordinates(int x, int y, const
+                                          std::string& direction) {
+    REQUIRE(isDirection(direction), "invalid direction");
+    int newx = directions.at(direction).first + x;
+    int newy = directions.at(direction).second + y;
+    return std::make_pair(newx,newy);
+}
