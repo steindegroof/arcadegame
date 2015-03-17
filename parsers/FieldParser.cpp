@@ -10,68 +10,20 @@ FieldParser::FieldParser() {
 FieldParser::~FieldParser() {
 }
 
-std::string ReadTag(TiXmlElement* e){
-    TiXmlNode* node = e->FirstChild();
-	TiXmlText* text = node->ToText();
-	return text->Value();
-}
-
-void FieldParser::parseFile() { //elem zal de root zijn van xml file
-	//code veranderen
-	//TiXmlNode* node = e->FirstChild();
-	//TiXmlText* text = node->ToText();
-	//REQUIRE(this->getRootName() == "VELD", "Rootname must be equal to 'VELD'");
-	
-	const char* fieldname;
-	TiXmlElement* e = this->root->FirstChildElement("NAAM");
-	if(e != NULL){
-	    TiXmlNode* node = e->FirstChild();
-	    if(node != NULL){
-	        fieldname = node->ToText()->Value();
-	    }
-	    else{
-	        std::cerr << "NAAM heeft geen childnodes." << std::endl;
-	    }
+bool FieldParser::parseFile() {
+	//PRECONDITIE dat root == VELD nog checken!
+	const char* fieldname = readFirstChildElement("NAAM",this->root);
+	if(fieldname[0] == '\0'){ //empty fieldname
+		std::cerr << "Het speelveld heeft geen naam!" << std::endl;
 	}
-	else{
-	    std::cerr << "XML bestand bevat geen naam voor het speelveld." << std::endl;
-	    return; //return false?
-	}	
-	int length;
-	e = this->root->FirstChildElement("LENGTE");
-	if(e != NULL){
-	    TiXmlNode* node = e->FirstChild();
-	    if(node != NULL){
-	        length = atoi(node->ToText()->Value());
-	    }
-	    else{
-	        std::cerr << "LENGTE heeft geen childnodes." << std::endl;
-	    }
+	int length = atoi(readFirstChildElement("LENGTE",this->root));
+	int width = atoi(readFirstChildElement("BREEDTE",this->root));
+	if(length < 0 || width < 0){
+		std::cerr << "Het speelveld heeft negatieve dimensies! Inconsistent speelveld. Het parsen werd afgebroken." << std::endl;
+		return false; //inconsistent speelveld.
 	}
-	else{
-	    std::cerr << "XML bestand bevat geen lengte voor het speelveld." << std::endl;
-	    return;
-	}
-	
-	int width;
-	e = this->root->FirstChildElement("BREEDTE");
-	if(e != NULL){
-	    TiXmlNode* node = e->FirstChild();
-	    if(node != NULL){
-	        length = atoi(node->ToText()->Value());
-	    }
-	    else{
-	        std::cerr << "BREEDTE heeft geen childnodes." << std::endl;
-	    }
-	}
-	else{
-	    std::cerr << "XML bestand bevat geen breedte voor het speelveld." << std::endl;
-	    return;
-	}
+	//std::cout << fieldname << length << width << std::endl;
 	field = new Field(fieldname,length,width);
-	
-	std::cout << "hallo is" << atoi("hallo") <<std::endl;
-	
 	for(TiXmlElement* e = this->root->FirstChildElement(); e != NULL; e = e->NextSiblingElement()){
 	    std::string tag = e->Value();
 	    if(tag == "NAAM" || tag == "LENGTE" || tag == "BREEDTE"){
@@ -83,73 +35,84 @@ void FieldParser::parseFile() { //elem zal de root zijn van xml file
 	        if(x != NULL && y != NULL){
                 int x_ = atoi(x);
                 int y_ = atoi(y);
-                TiXmlElement* name_el = e->FirstChildElement("NAAM");
-                if(name_el != NULL){
-                    TiXmlNode* name_node = name_el->FirstChild();
-	                if(name_node != NULL){
-	                    std::string spelernaam = name_node->ToText()->Value();
-	                    //new speler
-	                    std::cout << "spelernaam" << spelernaam;
-	                    Player* player = new Player(x_,y_,spelernaam);
-	                    
-	                }
-	                else{
-	                    std::cerr << "SPELERNAAM heeft geen childnodes." << std::endl;
-	                }
-                }
-                else{
-                    std::cerr << "Speler bevat geen naam." << std::endl;
-                }
+				if(x_ < 0 || y_ < 0){
+					std::cerr << "De speler bevat een negatief coordinaat. Inconsistent speelveld. Het parsen werd afgebroken." << std::endl;
+					return false;
+				}
+				const char* playername = readFirstChildElement("NAAM",e);
+				if(playername[0] == '\0'){ //empty playername
+					std::cerr << "Spelernaam mag niet leeg zijn. Inconsistent speelveld. Het parsen werd afgebroken." << std::endl;
+					return false; //inconsistent speelveld.
+				}
+				Player* player = new Player(x_,y_,playername); //speler aanmaken
+				bool add_succes;
+				add_succes = field->addPlayer(player);
+				if(!add_succes){
+					std::cerr << "Speler toevoegen aan speelveld mislukt."
+							  << "Inconsistent speelveld. Het parsen werd afgebroken." << std::endl;
+					delete player;
+					return false;
+				}
 	        }
 	        else{
-	            std::cerr << "x of y coordinaat afwezig bij speler" << std::endl;
+	            std::cerr << "x of y coordinaat afwezig bij speler." << std::endl;
 	            continue;
 	        }
 	    }
 	    else if(tag == "OBSTAKEL"){
-	    }
-	    else{
-	        std::cout << tag << std::endl;
-	        std::cerr << "Onherkenbaar element." << std::endl;
-	        //continue;
-	    }
-	}
-	
-	
-	/*
-	const char* fieldname = this->root->FirstChildElement("NAAM")->FirstChild()->ToText()->Value();
-	int length = atoi(this->root->FirstChildElement("LENGTE")->FirstChild()->ToText()->Value());
-	int width = atoi(this->root->FirstChildElement("BREEDTE")->FirstChild()->ToText()->Value());
-	
-	for(TiXmlElement* e = this->root->FirstChildElement(); e != NULL; e = e->NextSiblingElement()){
-	    std::string tag = e->Value();
-	    if(tag == "NAAM"){
-            //field->name = ReadTag(e);
-	    }
-	    else if(tag == "LENGTE"){
-	    }
-	    else if(tag == "BREEDTE"){
-	    }
-	    else if(tag == "SPELER"){
-	        const char* x = e->Attribute("x");
+			const char* x = e->Attribute("x");
 	        const char* y = e->Attribute("y");
-	        if(x != NULL && y != NULL){
-                //do smthng
+			const char* beweegbaar = e->Attribute("beweegbaar");
+	        if(x != NULL && y != NULL && beweegbaar != NULL){
                 int x_ = atoi(x);
                 int y_ = atoi(y);
-                atoi("hallo");
+				std::string beweegbaar_ = beweegbaar;
+				if(x_ < 0 || y_ < 0){
+					std::cerr << "Het obstakel bevat een negatief coordinaat. Inconsistent speelveld. Het parsen werd afgebroken." << std::endl;
+					return false;
+				}
+				bool movable;
+				if(beweegbaar_ == "true"){ //hoofdlettergevoelig maken!
+					movable = true;
+				}
+				else if(beweegbaar_ == "false"){
+					movable = false;
+				}
+				else{
+					std::cerr << "Het obstakel heeft geen geldige waarde voor het attribuut 'beweegbaar'. Dit obstakel werd genegeerd." << std::endl;
+					continue; //negeren.
+				}
+				std::string type = readFirstChildElement("TYPE",e);
+				Obstacle* obstacle;
+				if(type == "ton"){
+					obstacle = new Barrel(x_,y_,movable);
+				}
+				else if(type == "muur"){
+					obstacle = new Wall(x_,y_,movable);
+				}
+				else{ //empty type
+					std::cerr << "Obstakel met een onbekend type. Dit obstakel werd genegeerd." << std::endl;
+					continue; //negeren
+				}
+				bool add_succes;
+				add_succes = field->addObstacle(obstacle);
+				if(!add_succes){
+					std::cerr << "Obstakel toevoegen aan speelveld mislukt."
+							  << "Inconsistent speelveld. Het parsen werd afgebroken." << std::endl;
+					delete obstacle;
+					return false;
+				}
 	        }
 	        else{
-	            //blablabla
-	            std::cerr << "x of y coordinaat afwezig bij speler" << std::endl;
+	            std::cerr << "x/y/beweegbaar attribuut afwezig bij obstakel" << std::endl;
 	            continue;
 	        }
-	        //std::cout << x << std::endl;
 	    }
-	    else if(tag == "OBSTAKEL"){
+	    else{
+	        std::cerr << "Onherkenbaar element." << std::endl;
 	    }
-	}*/
-	//return catalog;
+	}
+	return true; //als we hier geraken is het parsen gelukt.
 }
 
 bool FieldParser::writeFile(std::string filename){

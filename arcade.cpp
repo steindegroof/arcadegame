@@ -133,12 +133,12 @@ Barrel::Barrel() {
            "constructor must end in properlyInitialized state");
 
 }
-Barrel::Barrel(int x, int y) {
+Barrel::Barrel(int x, int y,bool movable) {
     REQUIRE(x > 0 && y > 0, "coordinates must be greater than zero");
     _initCheck = this;
     this->x = x;
     this->y = y;
-    this->movable = true;
+    this->movable = movable;
     ENSURE(properlyInitialized(),
            "constructor must end in properlyInitialized state");
 
@@ -156,12 +156,12 @@ Wall::Wall() {
            "constructor must end in properlyInitialized state");
 
 }
-Wall::Wall(int x, int y) {
-    REQUIRE(x > 0 && y > 0, "coordinates must be greater than zero");
+Wall::Wall(int x, int y, bool movable) {
+    REQUIRE(x >= 0 && y >= 0, "coordinates must be greater than zero");
     _initCheck = this;
     this->x = x;
     this->y = y;
-    this->movable = false;
+    this->movable = movable;
     ENSURE(properlyInitialized(),
            "constructor must end in properlyInitialized state");
 }
@@ -248,4 +248,10 @@ std::pair<int, int> Field::getCoordinates(int x, int y, const
     int newx = directions.at(direction).first + x;
     int newy = directions.at(direction).second + y;
     return std::make_pair(newx,newy);
+}
+bool Field::addPlayer(Player*){
+	return true; //nog implementeren
+}
+bool Field::addObstacle(Obstacle*){
+	return true;//nog implementeren
 }

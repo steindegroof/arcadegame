@@ -15,7 +15,7 @@ CXXFLAGS =	-g -Wall -fmessage-length=0 -fomit-frame-pointer -pipe -std=c++11 -I$
 CPPFLAGS += -MD -MP 
 CPPFLAGS += -isystem $(GTEST_DIR)/include
 
-OBJS =		parsers/AbstractParser.o parsers/FieldParser.o tinyxml/tinyxml.o tinyxml/tinystr.o tinyxml/tinyxmlerror.o tinyxml/tinyxmlparser.o arcade.o
+OBJS =		parsers/AbstractParser.o parsers/FieldParser.o parsers/MovesParser.o tinyxml/tinyxml.o tinyxml/tinystr.o tinyxml/tinyxmlerror.o tinyxml/tinyxmlparser.o arcade.o
 SRCS =		arcademain.cpp #arcadetests.cpp
 TARGET =	arcademain arcadetests
 

@@ -25,7 +25,24 @@ bool AbstractParser::loadFile(std::string filename) {
 	return true;
 }
 
-std::string AbstractParser::getRootName(){
+std::string AbstractParser::getRootName(){ //we hebben ook al getRoot...
 	return root->Value();
+}
+
+const char* AbstractParser::readFirstChildElement(const char* s,TiXmlElement* root){
+	TiXmlElement* e = root->FirstChildElement(s);
+	if(e != NULL){
+	    TiXmlNode* node = e->FirstChild();
+	    if(node != NULL){
+	        return node->ToText()->Value();
+	    }
+	    else{
+	        std::cerr << s << " heeft geen childnodes." << std::endl;
+	    }
+	}
+	else{
+	    std::cerr << "XML bestand bevat geen " << s << " voor " << root->Value() << std::endl; //to lowercase??
+	}
+	return "";
 }
 

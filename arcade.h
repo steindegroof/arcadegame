@@ -100,7 +100,7 @@ public:
     * \post Constructor must end in properlyInitialized state 
     * \pre x > 0, y > 0
     */
-    Barrel(int x, int y);
+    Barrel(int x, int y, bool movable);
 };
 
 class Wall:public Obstacle{
@@ -114,7 +114,7 @@ public:
     * \post Constructor must end in properlyInitialized state 
     * \pre x > 0, y > 0
     */
-    Wall(int x, int y);
+    Wall(int x, int y, bool movable);
 };
 
 class Field{
@@ -181,6 +181,8 @@ public:
 	* \param[out]   succes	Geeft weer of de move gelukt is
         **/
         bool doMove(Move&);
+		bool addPlayer(Player*);
+		bool addObstacle(Obstacle*);
 };
 
 #endif

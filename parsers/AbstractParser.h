@@ -15,6 +15,7 @@ class AbstractParser {
 protected:
 	TiXmlElement * root;
 	TiXmlDocument doc;
+	const char* readFirstChildElement(const char*,TiXmlElement*);
 public:
 /**
  * \post Constructor must end in properlyInitialized state
@@ -37,7 +38,7 @@ public:
  */
 	bool loadFile(std::string filename);
 	
-	virtual void parseFile() = 0;
+	virtual bool parseFile() = 0;
 	
 	virtual bool writeFile(std::string filename) = 0;
 /**

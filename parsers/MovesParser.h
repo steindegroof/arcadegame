@@ -12,8 +12,7 @@
  */
 class MovesParser: public AbstractParser{
 private:
-	std::vector<Move*> moves;
-
+	std::vector<Move*>* moves;
 public:
 	MovesParser();
 	virtual ~MovesParser();
@@ -22,14 +21,14 @@ public:
 	 * This method expects the TiXmlElement that is passed as a parameter to represent an entire catalog of CDs.
 	 * It will then parse said catalog and return it as a pointer to a vector of CD*'s.
 	 */
-	void parseFile();
+	bool parseFile();
 	
 	bool writeFile(std::string filename);
 
 	/*
 	 * Returns a pointer to the parsed vector of CD*'s
 	 */
-	std::vector<Move*> getMoves();
+	std::vector<Move*>* getMoves();
 };
 
 #endif /* FIELDPARSER_H_ */
