@@ -1,0 +1,23 @@
+Bestand: testOutput/ResterendeBewegingen.txt
+
+Speler Chip zal volgende beweging nog uitvoeren:
+OMHOOG
+
+Speler Chip zal volgende beweging nog uitvoeren:
+OMHOOG
+
+Speler Chip zal volgende beweging nog uitvoeren:
+LINKS
+
+Speler Chip zal volgende beweging nog uitvoeren:
+OMHOOG
+
+Speler Chip zal volgende beweging nog uitvoeren:
+LINKS
+
+Speler Chip zal volgende beweging nog uitvoeren:
+OMHOOG
+
+Speler Chip zal volgende beweging nog uitvoeren:
+RECHTS
+

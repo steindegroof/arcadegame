@@ -106,7 +106,7 @@ TEST_F(ArcadeTest, addPlayer) {
     Field field2("veld", 5, 10);
 	Player player2(1, 3, "speler");
     EXPECT_TRUE(field2.addPlayer(&player2));
-	std::vector<Player*> players = field.getPlayers();
+	std::vector<Player*> players = field2.getPlayers();
 	EXPECT_EQ(players.size(), 1);
 
 }

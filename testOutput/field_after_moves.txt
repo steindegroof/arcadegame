@@ -1,0 +1,15 @@
+Bestand: testOutput/field_after_moves.txt
+
+Het huidige speelveld is Level 1:
+Eigenschappen van dit veld:
+-Breedte 10
+-Lengte 10
+
+Speler Chip bevindt zich in dit speelveld op positie (3,8).
+
+Er bevindt zich een ton op positie (5,1).
+
+Er bevindt zich een ton op positie (5,2).
+
+Er bevindt zich een ton op positie (3,4).
+

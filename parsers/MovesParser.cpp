@@ -1,5 +1,6 @@
 #include "MovesParser.h"
 #include <fstream>
+#include "../DesignByContract.h"
 
 MovesParser::MovesParser() {
 	moves = new std::vector<Move*>;
@@ -9,7 +10,8 @@ MovesParser::~MovesParser() {
 }
 
 bool MovesParser::parseFile() {
-	//PRECONDITIE rootname == BEWEGINGEN
+	REQUIRE(this->getRootName() == "BEWEGINGEN", 
+	        "FieldParser verwacht als rootname 'BEWEGINGEN'. Dit werd niet gevonden.");
 	for(TiXmlElement* e = this->root->FirstChildElement(); e != NULL; e = e->NextSiblingElement()){
 	    std::string tag = e->Value();
 		if(tag == "BEWEGING"){

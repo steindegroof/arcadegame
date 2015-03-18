@@ -1,0 +1,3 @@
+Bestand: testOutput/moves_after_moves.txt
+
+geen bewegingen.

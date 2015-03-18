@@ -10,7 +10,6 @@ bool isDirection(std::string direction) {
     return directions.count(direction) != 0;
 }
 
-
 /**
 * Move
 **/
@@ -315,7 +314,6 @@ bool Field::addPlayer(Player* player){
 		else{
 			playfield[x][y] = player; 
             players.push_back(player);
-			std::cout << "ADDED PLAYER: " << this->players.size() << std::endl;
 	        return true;
 		}
 	}

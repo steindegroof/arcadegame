@@ -1,6 +1,7 @@
 #include "FieldParser.h"
 #include <stdlib.h>
 #include <fstream>
+#include "../DesignByContract.h"
 
 FieldParser::FieldParser() {
 	//field = new Field();
@@ -11,18 +12,19 @@ FieldParser::~FieldParser() {
 }
 
 bool FieldParser::parseFile() {
-	//PRECONDITIE dat root == VELD nog checken!
+	REQUIRE(this->getRootName() == "VELD", 
+	        "FieldParser verwacht als rootname 'VELD'. Dit werd niet gevonden.");
 	const char* fieldname = readFirstChildElement("NAAM",this->root);
 	if(fieldname[0] == '\0'){ //empty fieldname
 		std::cerr << "Het speelveld heeft geen naam!" << std::endl;
+		return false;
 	}
 	int length = atoi(readFirstChildElement("LENGTE",this->root));
 	int width = atoi(readFirstChildElement("BREEDTE",this->root));
-	if(length < 0 || width < 0){
+	if(length <= 0 || width <= 0){
 		std::cerr << "Het speelveld heeft negatieve dimensies! Inconsistent speelveld. Het parsen werd afgebroken." << std::endl;
 		return false; //inconsistent speelveld.
 	}
-	//std::cout << fieldname << length << width << std::endl;
 	field = new Field(fieldname,length,width);
 	for(TiXmlElement* e = this->root->FirstChildElement(); e != NULL; e = e->NextSiblingElement()){
 	    std::string tag = e->Value();
