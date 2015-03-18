@@ -71,6 +71,7 @@ public:
     Player(int x, int y, std::string name);
     bool properlyInitialized() const;
     std::string getName() const;	
+    void setName(std::string);
 };
 
 class Obstacle:public PlayPiece{
@@ -168,7 +169,6 @@ protected:
     * \param[OUT]   found           whether the player was found
     **/
     bool hasPlayer(const Player*);
-    Player* getPlayer(std::string playername) const;
     PlayPiece* getPlayPiece(int x, int y) const;
     PlayPiece* getPlayPiece(std::pair<int, int>) const;
 
@@ -195,6 +195,7 @@ public:
 	std::string getName();
 	int getLength();
 	int getWidth();
+    Player* getPlayer(std::string playername) const;
 	std::vector<Obstacle*> getObstacles();
 	std::vector<Player*> getPlayers();
 };

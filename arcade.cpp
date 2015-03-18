@@ -106,7 +106,6 @@ Player::Player() {
     movable = true;
     ENSURE(properlyInitialized(),
            "constructor must end in properlyInitialized state");
-
 }
 Player::Player(int x, int y, std::string name) {
     REQUIRE(x >= 0 && y >= 0, "coordinates must be >= 0");
@@ -125,6 +124,11 @@ std::string Player::getName() const{
     REQUIRE(this->properlyInitialized(), 
 	        "Player wasn't initialized when calling getName");
     return this->name;
+}
+void Player::setName(std::string name) {
+    REQUIRE(this->properlyInitialized(), 
+   	        "Player wasn't initialized when calling setName");
+    this->name = name;
 }
 /**
 * Obstacle
@@ -275,7 +279,7 @@ bool Field::isEmpty(std::pair<int, int> coordinates) {
 bool Field::hasCoordinates(int x, int y) const {
     REQUIRE(this->properlyInitialized(), 
 	        "Field wasn't initialized when calling hasCoordinates");
-    if (x < 0 || y < 0 || x > this->width || y > this->length) {
+    if (x < 0 || y < 0 || x >= this->width || y >= this->length) {
         return false;
     }
     else {
@@ -311,13 +315,14 @@ bool Field::addPlayer(Player* player){
 		else{
 			playfield[x][y] = player; 
             players.push_back(player);
+			std::cout << "ADDED PLAYER: " << this->players.size() << std::endl;
+	        return true;
 		}
 	}
 	else{
 		std::cerr << "De speler die je wou toevoegen heeft coordinaten die niet binnen het speelveld liggen." << std::endl;
 		return false;
 	}
-	return true;
 }  
 Player* Field::getPlayer(std::string playername) const {
     REQUIRE(this->properlyInitialized(), 

@@ -8,7 +8,7 @@
 
 class ArcadeTest: public ::testing::Test {
 protected:
-	friend class Field;
+	friend  Field;
 	// You should make the members protected s.t. they can be
 	// accessed from sub-classes.
 
@@ -93,8 +93,50 @@ TEST_F(ArcadeTest, PlayerConstructor) {
 }
 TEST_F(ArcadeTest, FieldConstructor) {
 	EXPECT_TRUE(field.properlyInitialized());
-	// verify post-condition
 	EXPECT_EQ(field.getLength(), 0);
 	EXPECT_EQ(field.getWidth(), 0);
 	EXPECT_EQ(field.getName(), "");
+	Field field2("naam", 5, 10);
+	EXPECT_TRUE(field.properlyInitialized());
+	EXPECT_EQ(field2.getLength(), 5);
+	EXPECT_EQ(field2.getWidth(), 10);
+	EXPECT_EQ(field2.getName(), "naam");
+}
+TEST_F(ArcadeTest, addPlayer) {
+    Field field2("veld", 5, 10);
+	Player player2(1, 3, "speler");
+    EXPECT_TRUE(field2.addPlayer(&player2));
+	std::vector<Player*> players = field.getPlayers();
+	EXPECT_EQ(players.size(), 1);
+
+}
+
+TEST_F(ArcadeTest, HappyDoMove) {
+    Field field3("veld", 5, 10);
+	Player player3(0, 3, "speler");
+	field3.addPlayer(&player3);
+	// succesful move
+	Move moveUP("speler", "OMHOOG");
+	Move moveDOWN("speler", "OMLAAG");
+	Move moveLEFT("speler", "LINKS");
+	Move moveRIGHT("speler", "RECHTS");
+    field3.doMove(moveUP);
+	EXPECT_EQ(player3.getX(), 0);
+	EXPECT_EQ(player3.getY(), 4);
+    // try to move off the left, then top, then bottomn then right
+    field3.doMove(moveLEFT);
+   	EXPECT_EQ(player3.getX(), 0);
+	EXPECT_EQ(player3.getY(), 4);
+    field3.doMove(moveUP);
+   	EXPECT_EQ(player3.getX(), 0);
+	EXPECT_EQ(player3.getY(), 4);
+    for (int i = 0; i < 11; i++) {
+	    field3.doMove(moveDOWN);
+		field3.doMove(moveRIGHT);
+	}
+   	EXPECT_EQ(player3.getX(), 9);
+	EXPECT_EQ(player3.getY(), 0);
+    // and now with some obstacles
+
+
 }
