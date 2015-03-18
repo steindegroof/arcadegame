@@ -118,6 +118,11 @@ bool FieldParser::parseFile() {
 bool FieldParser::writeFile(std::string filename){
 	std::ofstream myfile;
   	myfile.open(filename);
+	if (myfile.fail()) {
+	     std::cerr << "Couldn't open file " << filename << " for writing" << std::endl;
+	     return false;
+    }
+
 	myfile << "Bestand: " << filename << std::endl << std::endl;
   	myfile << "Het huidige speelveld is " << field->getName() << ":" << std::endl
 		   << "Eigenschappen van dit veld:" << std::endl
