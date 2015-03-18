@@ -14,6 +14,7 @@ int main(int argc, char* argv[]){
 	movesparser.loadFile("xml_files/Bewegingen1.0.xml");
 	//std::cout << "Name of root: " << movesparser.getRootName() << std::endl;
 	movesparser.parseFile();
+	movesparser.writeFile("ResterendeBewegingen.txt");
 	
 	return 0;
 }

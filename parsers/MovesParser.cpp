@@ -1,4 +1,5 @@
 #include "MovesParser.h"
+#include <fstream>
 
 MovesParser::MovesParser() {
 	moves = new std::vector<Move*>;
@@ -34,6 +35,20 @@ bool MovesParser::parseFile() {
 }
 
 bool MovesParser::writeFile(std::string filename){
+	std::ofstream myfile;
+  	myfile.open(filename);
+	myfile << "Bestand: " << filename << std::endl << std::endl;
+	if(moves->empty()){
+		myfile << "geen bewegingen." << std::endl;
+	}
+	else{
+		std::vector<Move*>::iterator it;
+		for(it = moves->begin(); it!= moves->end(); it++){
+			myfile << "Speler " << (*it)->getPlayerName() << " zal volgende beweging nog uitvoeren:" << std::endl 
+				   << (*it)->getDirection() << std::endl << std::endl;
+		}
+	}
+	myfile.close();
     return true;
 }
 
