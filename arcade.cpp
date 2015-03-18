@@ -14,14 +14,14 @@ bool isDirection(std::string direction) {
 /**
 * Move
 **/
-ove::Move() {
+Move::Move() {
     _initCheck = this;
     playername = "";
     direction = "";
     ENSURE(properlyInitialized(),
            "constructor must end in properlyInitialized state");
 }
-ove::Move(std::string playername, std::string direction) {
+Move::Move(std::string playername, std::string direction) {
     REQUIRE( isDirection(direction), "invalid direction");
     _initCheck = this;
     this->playername = playername;
@@ -204,9 +204,9 @@ Field::Field(std::string name,const int length,const int width){
     this->name = name;
     this->length = length;
     this->width = width;
-    this->playfield = new PlayPiece*[width];
+    this->playfield = new PlayPiece**[width];
     for(int i = 0; i < width; ++i){
-        this->playfield[i] = new PlayPiece[length];
+        this->playfield[i] = new PlayPiece*[length];
     }
     this->obstacles = {};
     this->players = {};
@@ -216,13 +216,13 @@ Field::Field(std::string name,const int length,const int width){
 bool Field::properlyInitialized() {
     return this == _initCheck;
 }
-bool Field::pushObstacle(Obstacle& obstacle, const std::string& direction) {
+bool Field::pushObstacle(PlayPiece* obstacle, const std::string& direction) {
     REQUIRE(isDirection(direction), "invalid direction");
-    if (!obstacle.isMovable()) {
+    if (!obstacle->isMovable()) {
         return false;
     }
-    int oldX = obstacle.getX();
-    int oldY = obstacle.getY();
+    int oldX = obstacle->getX();
+    int oldY = obstacle->getY();
     std::pair<int,int> destination = this->getCoordinates(oldX, oldY,
                                                            direction);
     int newX = destination.first;
@@ -235,14 +235,14 @@ bool Field::pushObstacle(Obstacle& obstacle, const std::string& direction) {
     }
     this->playfield[oldX][oldY] = this->playfield[newX][newY];
     this->playfield[newX][newY] = obstacle;
-    obstacle.setX(newX);
-    obstacle.setY(newY);
+    obstacle->setX(newX);
+    obstacle->setY(newY);
     return true;
 
 }
 bool Field::isEmpty(int x, int y) {
     REQUIRE(this->hasCoordinates(x, y), "invalid coordinates");
-    if (this->playfield[x][y].isEmpty()) {
+    if (this->playfield[x][y]->isEmpty()) {
         return true;
     }
     else {
@@ -283,7 +283,7 @@ bool Field::addPlayer(Player* player){
 			return false;
 		}
 		else{
-			playfield[x][y] = *player; //////// ik wil pointer...
+			playfield[x][y] = player; //////// ik wil pointer...
 			players.push_back(player);
 		}
 	}
@@ -310,6 +310,7 @@ PlayPiece* Field::getPlayPiece(int x, int y) const {
 PlayPiece* Field::getPlayPiece(std::pair<int, int> coordinates) const {
     return this->getPlayPiece(coordinates.first, coordinates.second);
 }
+
 bool Field::hasPlayer(const Player* player) {
     return std::find(players.begin(),players.end(),player) != players.end();
 }
@@ -322,7 +323,7 @@ bool Field::addObstacle(Obstacle* obstacle){
 			return false;
 		}
 		else{
-			playfield[x][y] = *obstacle; //////// ik wil pointer...
+			playfield[x][y] = obstacle; //////// ik wil pointer...
 			obstacles.push_back(obstacle);
 		}
 	}
@@ -369,7 +370,7 @@ bool Field::doMove(const Move& move) {
     int newX = newcoordinates.first;
     int newY = newcoordinates.second;
     this->playfield[oldX][oldY] = this->playfield[newX][newY];
-    this->playfield[newX][newY] = *player;
+    this->playfield[newX][newY] = player;
     player->setX(newX);
     player->setY(newY);
     return true;
