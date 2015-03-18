@@ -30,13 +30,17 @@ Move::Move(std::string playername, std::string direction) {
            "constructor must end in properlyInitialized state");
 
 }
-bool Move::properlyInitialized() {
+bool Move::properlyInitialized() const {
     return this == _initCheck;
 }
 const std::string Move::getPlayerName() const {
+    REQUIRE(this->properlyInitialized(), 
+	        "Move wasn't initialized when calling getPlayerName");
     return this->playername;
 }
 const std::string Move::getDirection() const {
+    REQUIRE(this->properlyInitialized(), 
+	        "Move wasn't initialized when calling getDirection");
     return this->direction;
 }
 
@@ -53,7 +57,7 @@ PlayPiece::PlayPiece() {
 
 }
 PlayPiece::PlayPiece(int x, int y, bool movable) {
-    REQUIRE(x > 0 && y > 0, "coordinates must be greater than zero");
+    REQUIRE(x >= 0 && y >= 0, "coordinates must be greater than zero");
     _initCheck = this;
     this->x = x;
     this->y = y;
@@ -62,25 +66,37 @@ PlayPiece::PlayPiece(int x, int y, bool movable) {
            "constructor must end in properlyInitialized state");
 
 }
-bool PlayPiece::properlyInitialized() {
+const bool PlayPiece::properlyInitialized() const {
     return this == _initCheck;
 }
 bool PlayPiece::isEmpty() {
+    REQUIRE(this->properlyInitialized(), 
+	        "PlayPiece wasn't initialized when calling isEmpty");
     return this->x == 0 && this->y == 0;
 }
 bool PlayPiece::isMovable() {
+    REQUIRE(this->properlyInitialized(), 
+	        "PlayPiece wasn't initialized when calling isMovable");
     return this->movable;
 }
 int PlayPiece::getX() const{
+    REQUIRE(this->properlyInitialized(), 
+	        "PlayPiece wasn't initialized when calling getX");
     return this->x;
 } 
 int PlayPiece::getY() const{
+    REQUIRE(this->properlyInitialized(), 
+	        "PlayPiece wasn't initialized when calling getY");
     return this->y;
 } 
 void PlayPiece::setX(int x) {
+    REQUIRE(this->properlyInitialized(), 
+	        "PlayPiece wasn't initialized when calling setX");
     this->x = x;
 }
 void PlayPiece::setY(int y) {
+    REQUIRE(this->properlyInitialized(), 
+	        "PlayPiece wasn't initialized when calling setY");
     this->y = y;
 }
 
@@ -107,10 +123,12 @@ Player::Player(int x, int y, std::string name) {
     ENSURE(properlyInitialized(),
            "constructor must end in properlyInitialized state");
 }
-bool Player::properlyInitialized() {
+bool Player::properlyInitialized() const {
     return this == _initCheck;
 }
 std::string Player::getName() const{
+    REQUIRE(this->properlyInitialized(), 
+	        "Player wasn't initialized when calling getName");
     return this->name;
 }
 /**
@@ -125,7 +143,7 @@ Obstacle::Obstacle() {
            "constructor must end in properlyInitialized state");
 
 }
-bool Obstacle::properlyInitialized() {
+bool Obstacle::properlyInitialized() const {
     return this == _initCheck;
 }
 std::string Obstacle::getType(){
@@ -216,10 +234,12 @@ Field::Field(std::string name,const int length,const int width){
     ENSURE(properlyInitialized(),
            "constructor must end in properlyInitialized state");
 }
-bool Field::properlyInitialized() {
+bool Field::properlyInitialized() const {
     return this == _initCheck;
 }
 bool Field::pushObstacle(PlayPiece* obstacle, const std::string& direction) {
+    REQUIRE(this->properlyInitialized(), 
+	        "Field wasn't initialized when calling pushObstacle");
     REQUIRE(isDirection(direction), "invalid direction");
     if (!obstacle->isMovable()) {
         return false;
@@ -244,6 +264,8 @@ bool Field::pushObstacle(PlayPiece* obstacle, const std::string& direction) {
 
 }
 bool Field::isEmpty(int x, int y) {
+    REQUIRE(this->properlyInitialized(), 
+	        "Field wasn't initialized when calling isEmpty");
     REQUIRE(this->hasCoordinates(x, y), "invalid coordinates");
     if (this->playfield[x][y] == nullptr) {
         return true;
@@ -256,7 +278,9 @@ bool Field::isEmpty(std::pair<int, int> coordinates) {
     return this->isEmpty(coordinates.first, coordinates.second);
 }
 bool Field::hasCoordinates(int x, int y) const {
-    if (x < 1 || y < 1 || x > this->width || y > this->length) {
+    REQUIRE(this->properlyInitialized(), 
+	        "Field wasn't initialized when calling hasCoordinates");
+    if (x < 0 || y < 0 || x > this->width || y > this->length) {
         return false;
     }
     else {
@@ -268,13 +292,17 @@ bool Field::hasCoordinates(std::pair<int, int> coordinates) const {
 }
 std::pair<int, int> Field::getCoordinates(int x, int y, const
                                           std::string& direction) const {
+    REQUIRE(this->properlyInitialized(), 
+	        "Field wasn't initialized when calling getCoordinates");
     REQUIRE(isDirection(direction), "invalid direction");
     int newx = directions.at(direction).first + x;
     int newy = directions.at(direction).second + y;
     return std::make_pair(newx,newy);
 }
 bool Field::addPlayer(Player* player){
-	if(hasPlayer(player)){
+    REQUIRE(this->properlyInitialized(), 
+	        "Field wasn't initialized when calling addPlayer");
+    if(hasPlayer(player)){
 		std::cerr << "De speler die je wou toevoegen bestaat al." << std::endl;
 		return false;
 	}
@@ -286,8 +314,8 @@ bool Field::addPlayer(Player* player){
 			return false;
 		}
 		else{
-			playfield[x][y] = player; //////// ik wil pointer...
-			players.push_back(player);
+			playfield[x][y] = player; 
+            players.push_back(player);
 		}
 	}
 	else{
@@ -297,6 +325,8 @@ bool Field::addPlayer(Player* player){
 	return true;
 }  
 Player* Field::getPlayer(std::string playername) const {
+    REQUIRE(this->properlyInitialized(), 
+	        "Field wasn't initialized when calling getPlayer");
     std::vector<Player*>::const_iterator i;
     for (i = this->players.begin(); i != this->players.end(); i++) {
         Player* player = *i;
@@ -307,6 +337,8 @@ Player* Field::getPlayer(std::string playername) const {
 	return nullptr;
 }
 PlayPiece* Field::getPlayPiece(int x, int y) const {
+    REQUIRE(this->properlyInitialized(), 
+	        "Field wasn't initialized when calling getPlayPiece");
     REQUIRE(this->hasCoordinates(x,y), "invalid coordinates");
     return this->playfield[x][y];
 }
@@ -315,9 +347,13 @@ PlayPiece* Field::getPlayPiece(std::pair<int, int> coordinates) const {
 }
 
 bool Field::hasPlayer(const Player* player) {
+    REQUIRE(this->properlyInitialized(), 
+	        "Field wasn't initialized when calling hasPlayer");
     return std::find(players.begin(),players.end(),player) != players.end();
 }
 bool Field::addObstacle(Obstacle* obstacle){
+    REQUIRE(this->properlyInitialized(), 
+	        "Field wasn't initialized when calling addObstacle");
     int x = obstacle->getX();
 	int y = obstacle->getY();
 	if(hasCoordinates(std::make_pair(x,y))){ //zien of obstacle binnen veld zit.
@@ -337,21 +373,33 @@ bool Field::addObstacle(Obstacle* obstacle){
 	return true;
 }
 std::string Field::getName(){
-	return name;
+    REQUIRE(this->properlyInitialized(), 
+	        "Field wasn't initialized when calling getName");
+    return name;
 }
 int Field::getLength(){
-	return length;
+    REQUIRE(this->properlyInitialized(), 
+	        "Field wasn't initialized when calling getLength");
+    return length;
 }
 int Field::getWidth(){
-	return width;
+    REQUIRE(this->properlyInitialized(), 
+	        "Field wasn't initialized when calling getWidth");
+    return width;
 }
 std::vector<Obstacle*> Field::getObstacles(){
-	return obstacles;
+    REQUIRE(this->properlyInitialized(), 
+	        "Field wasn't initialized when calling getObstacles");
+    return obstacles;
 }
 std::vector<Player*> Field::getPlayers(){
-	return players;
+    REQUIRE(this->properlyInitialized(), 
+	        "Field wasn't initialized when calling getPlayers");
+    return players;
 }
 bool Field::doMove(const Move& move) {
+    REQUIRE(this->properlyInitialized(), 
+	        "Field wasn't initialized when calling doMove");
     std::string playername = move.getPlayerName();
     Player* player = this->getPlayer(playername);
     int oldX = player->getX();

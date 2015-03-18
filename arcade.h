@@ -23,7 +23,7 @@ public:
     * \pre direction is one of: OMHOOG, LINKS, OMLAAG, RECHTS 
     */
     Move(std::string playername,std::string direction);
-    bool properlyInitialized();
+    bool properlyInitialized() const;
     const std::string getPlayerName() const;
     const std::string getDirection() const;
 };
@@ -44,7 +44,7 @@ public:
     * \pre  x > 0, y > 0
     **/
     PlayPiece(int x, int y, bool movable);
-    bool properlyInitialized();
+    const bool properlyInitialized() const;
     /**
     * \brief indicates whether a piece is empty. A piece with coordinates
     * (0,0) as set by the default constructor is considered empty.
@@ -74,7 +74,7 @@ public:
     * \pre  x > 0, y > 0
     **/
     Player(int x, int y, std::string name);
-    bool properlyInitialized();
+    bool properlyInitialized() const;
     std::string getName() const;	
 };
 
@@ -87,7 +87,7 @@ public:
     * \post Constructor must end in properlyInitialized state 
     */
     Obstacle();
-    bool properlyInitialized();
+    bool properlyInitialized() const;
     std::string getType();
 };
 
@@ -188,7 +188,7 @@ public:
         * \pre length > 0, width > 0
         */
 	Field(std::string name, const int length, const int width);
-	bool properlyInitialized();
+	bool properlyInitialized() const;
         /** 
         * \brief verplaats een playpieve volgens de opgegeven move.
         * \param[in]	move	De te maken move
