@@ -13,6 +13,7 @@
 class MovesParser: public AbstractParser{
 private:
 	std::vector<Move*>* moves;
+    friend std::ostream& operator<<(std::ostream&, const MovesParser&);
 public:
 	MovesParser();
 	virtual ~MovesParser();

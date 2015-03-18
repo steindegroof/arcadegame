@@ -39,19 +39,12 @@ bool MovesParser::writeFile(std::string filename){
   	myfile.open(filename);
 	if (myfile.fail()) {
 	    std::cerr << "Couldn't open file " << filename << " for writing" << std::endl;
+		std::cout << "Bestand: " << filename << std::endl << std::endl;
+		std::cout << *this;
 		return false;
 	}
 	myfile << "Bestand: " << filename << std::endl << std::endl;
-	if(moves->empty()){
-		myfile << "geen bewegingen." << std::endl;
-	}
-	else{
-		std::vector<Move*>::iterator it;
-		for(it = moves->begin(); it!= moves->end(); it++){
-			myfile << "Speler " << (*it)->getPlayerName() << " zal volgende beweging nog uitvoeren:" << std::endl 
-				   << (*it)->getDirection() << std::endl << std::endl;
-		}
-	}
+	myfile << *this;
 	myfile.close();
     return true;
 }
@@ -59,3 +52,18 @@ bool MovesParser::writeFile(std::string filename){
 std::vector<Move*>* MovesParser::getMoves() {
 	 return moves;
 }
+
+std::ostream& operator<<(std::ostream& output, const MovesParser& mp) {
+   	if(mp.moves->empty()){
+        output << "geen bewegingen." << std::endl;
+	}
+	else{
+		std::vector<Move*>::iterator it;
+		for(it = mp.moves->begin(); it!= mp.moves->end(); it++){
+			output << "Speler " << (*it)->getPlayerName() << " zal volgende beweging nog uitvoeren:" << std::endl 
+				   << (*it)->getDirection() << std::endl << std::endl;
+		}
+	}
+    return output;
+}
+

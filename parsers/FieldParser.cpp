@@ -141,11 +141,11 @@ bool FieldParser::writeFile(std::string filename){
 	if (myfile.fail()) {
 	    std::cerr << "Couldn't open file " << filename << " for writing" << std::endl;
 		std::cerr << "Writing to console..." << std::endl;
-		std::cout << *this;
+		std::cout << "Bestand: " << filename << std::endl << std::endl << *this;
 	    return false;
     }
 	else{
-		myfile << *this;
+		myfile << "Bestand: " << filename << std::endl << std::endl << *this;
 		myfile.close();
 	}
     return true;
@@ -175,5 +175,4 @@ std::ostream& operator<<(std::ostream& output, const FieldParser& fp) {
 		}
 	}
 	return output;
-
 }
