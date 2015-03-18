@@ -252,7 +252,7 @@ bool Field::isEmpty(int x, int y) {
 bool Field::isEmpty(std::pair<int, int> coordinates) {
     return this->isEmpty(coordinates.first, coordinates.second);
 }
-bool Field::hasCoordinates(int x, int y) {
+bool Field::hasCoordinates(int x, int y) const {
     if (x < 1 || y < 1 || x > this->width || y > this->length) {
         return false;
     }
@@ -260,7 +260,7 @@ bool Field::hasCoordinates(int x, int y) {
         return true;
     }
 }
-bool Field::hasCoordinates(std::pair<int, int> coordinates) {
+bool Field::hasCoordinates(std::pair<int, int> coordinates) const {
     return this->hasCoordinates(coordinates.first, coordinates.second);
 }
 std::pair<int, int> Field::getCoordinates(int x, int y, const
@@ -300,6 +300,13 @@ Player* Field::getPlayer(std::string playername) const {
     }
 	return nullptr;
 }
+PlayPiece* Field::getPlayPiece(int x, int y) const {
+    REQUIRE(this->hasCoordinates(x,y), "invalid coordinates");
+    return this->playfield[x][y];
+}
+PlayPiece* Field::getPlayPiece(std::pair<int, int> coordinates) const {
+    return this->getPlayPiece(coordinates.first, coordinates.second);
+}
 bool Field::hasPlayer(const Player* player) {
     return std::find(players.begin(),players.end(),player) != players.end();
 }
@@ -321,7 +328,7 @@ std::vector<Obstacle*> Field::getObstacles(){
 std::vector<Player*> Field::getPlayers(){
 	return players;
 }
-bool Field::doMove(const Move& move) {/*
+bool Field::doMove(const Move& move) {
     std::string playername = move.getPlayerName();
     Player* player = this->getPlayer(playername);
     int oldX = player->getX();
@@ -334,8 +341,8 @@ bool Field::doMove(const Move& move) {/*
     }
     if (!this->isEmpty(newcoordinates)) {
         // try to move the piece that's in the way
-        PlayPiece& piece = this->getPlayPiece(newcoordinates);
-        if (!this->move(piece, direction)) {
+        PlayPiece* piece = this->getPlayPiece(newcoordinates);
+        if (!this->pushObstacle(piece, direction)) {
             return false;
         }
     }
@@ -345,6 +352,6 @@ bool Field::doMove(const Move& move) {/*
     this->playfield[oldX][oldY] = this->playfield[newX][newY];
     this->playfield[newX][newY] = *player;
     player->setX(newX);
-    player->setY(newY);*/
+    player->setY(newY);
     return true;
 }
