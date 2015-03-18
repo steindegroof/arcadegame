@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <iostream>
 #include "arcade.h"
 #include "DesignByContract.h"
 
@@ -104,6 +105,9 @@ Player::Player(int x, int y, std::string name) {
 bool Player::properlyInitialized() {
     return this == _initCheck;
 }
+std::string Player::getName(){
+	return name;
+}
 
 /**
 * Obstacle
@@ -120,6 +124,9 @@ Obstacle::Obstacle() {
 bool Obstacle::properlyInitialized() {
     return this == _initCheck;
 }
+std::string Obstacle::getType(){
+	return type;
+}
 
 /**
 * Barrel
@@ -129,6 +136,7 @@ Barrel::Barrel() {
     x = 0;
     y = 0;
     movable = true;
+	type = "ton";
     ENSURE(properlyInitialized(),
            "constructor must end in properlyInitialized state");
 
@@ -139,6 +147,7 @@ Barrel::Barrel(int x, int y,bool movable) {
     this->x = x;
     this->y = y;
     this->movable = movable;
+	type = "ton";
     ENSURE(properlyInitialized(),
            "constructor must end in properlyInitialized state");
 
@@ -152,6 +161,7 @@ Wall::Wall() {
     x = 0;
     y = 0;
     movable = false;
+	type = "muur";
     ENSURE(properlyInitialized(),
            "constructor must end in properlyInitialized state");
 
@@ -162,6 +172,7 @@ Wall::Wall(int x, int y, bool movable) {
     this->x = x;
     this->y = y;
     this->movable = movable;
+	type = "muur";
     ENSURE(properlyInitialized(),
            "constructor must end in properlyInitialized state");
 }
@@ -249,9 +260,44 @@ std::pair<int, int> Field::getCoordinates(int x, int y, const
     int newy = directions.at(direction).second + y;
     return std::make_pair(newx,newy);
 }
-bool Field::addPlayer(Player*){
-	return true; //nog implementeren
+bool Field::hasPlayer(const Player&){
+	return false;
+}
+bool Field::addPlayer(Player* player){
+	if(hasPlayer(*player)){
+		std::cerr << "De speler die je wou toevoegen bestaat al." << std::endl;
+		return false;
+	}
+	int x = player->getX();
+	int y = player->getY();
+	int min_coo = 0;
+	if( (x >= min_coo && x <= this->getWidth()) && ( y>= min_coo && y <= this->getLength() ) ){ //zien of player binnen veld zit.
+		if(!isEmpty(x,y)){
+			std::cerr << "Er bevind zich al een entiteit op de positie waarop je de speler wil initialiseren." << std::endl;
+			return false;
+		}
+	}
+	else{
+		std::cerr << "De speler die je wou toevoegen heeft coordinaten die niet binnen het speelveld liggen." << std::endl;
+		return false;
+	}
+	return true;   
 }
 bool Field::addObstacle(Obstacle*){
 	return true;//nog implementeren
+}
+std::string Field::getName(){
+	return name;
+}
+int Field::getLength(){
+	return length;
+}
+int Field::getWidth(){
+	return width;
+}
+std::vector<Obstacle*> Field::getObstacles(){
+	return obstacles;
+}
+std::vector<Player*> Field::getPlayers(){
+	return players;
 }

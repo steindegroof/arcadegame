@@ -75,18 +75,20 @@ public:
     **/
     Player(int x, int y, std::string name);
     bool properlyInitialized();
+	std::string getName();
 };
 
 class Obstacle:public PlayPiece{
 protected:
 	Obstacle* _initCheck;
+	std::string type;
 public:
     /**
     * \post Constructor must end in properlyInitialized state 
     */
     Obstacle();
     bool properlyInitialized();
-	
+	std::string getType();
 };
 
 class Barrel:public Obstacle{
@@ -124,8 +126,8 @@ private:
 	int length;
 	int width;
 	PlayPiece** playfield;
-	std::vector<Obstacle> obstacles;
-	std::vector<Player> players;
+	std::vector<Obstacle*> obstacles;
+	std::vector<Player*> players;
         /**
         * \brief        pushes obstacle in direction if possible
         * \param[in]    obstacle        the obstacle to move
@@ -163,6 +165,7 @@ private:
         * \param[OUT]   coordinates     the resulting coordinates
         **/
         std::pair<int, int> getCoordinates(int x, int y, const std::string& direction);
+		bool hasPlayer(const Player&);
 public:
         /**
         * \post Constructor must end in properlyInitialized state 
@@ -183,6 +186,11 @@ public:
         bool doMove(Move&);
 		bool addPlayer(Player*);
 		bool addObstacle(Obstacle*);
+		std::string getName();
+		int getLength();
+		int getWidth();
+		std::vector<Obstacle*> getObstacles();
+		std::vector<Player*> getPlayers();
 };
 
 #endif

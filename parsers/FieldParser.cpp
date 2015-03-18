@@ -1,6 +1,6 @@
 #include "FieldParser.h"
 #include <stdlib.h>
-
+#include <fstream>
 
 FieldParser::FieldParser() {
 	//field = new Field();
@@ -116,6 +116,25 @@ bool FieldParser::parseFile() {
 }
 
 bool FieldParser::writeFile(std::string filename){
+	std::ofstream myfile;
+  	myfile.open(filename);
+  	myfile << "Het huidige speelveld is " << field->getName() << ":" << std::endl
+		   << "Eigenschappen van dit veld:" << std::endl
+		   << "-Breedte " << field->getWidth() << std::endl
+		   << "-Lengte " << field->getLength() << std::endl << std::endl;
+	std::vector<Player*> players = field->getPlayers();
+	std::vector<Player*>::iterator it_pl;
+	for(it_pl = players.begin(); it_pl!= players.end(); it_pl++){
+		myfile << "Speler " << (*it_pl)->getName() << " bevindt zich in dit speelveld op positie (" 
+			   << (*it_pl)->getX() << "," << (*it_pl)->getY() << ")." << std::endl << std::endl;
+	}
+	std::vector<Obstacle*> obstacles = field->getObstacles();
+	std::vector<Obstacle*>::iterator it_obst;
+	for(it_obst = obstacles.begin(); it_obst != obstacles.end(); it_obst++){
+		myfile << "Er bevindt zich een " << (*it_obst)->getType() << " op positie ("
+			   << (*it_obst)->getX() << "," << (*it_obst)->getY() << ")." << std::endl << std::endl;
+	}
+  	myfile.close();
     return true;
 }
 

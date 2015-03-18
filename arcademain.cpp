@@ -8,6 +8,7 @@ int main(int argc, char* argv[]){
 	fieldparser.loadFile("xml_files/Speelveld1.0.xml");
 	fieldparser.parseFile();
 	//std::cout << "Name of root: " << fieldparser.getRootName() << std::endl;
+	fieldparser.writeFile("speelveld.txt");
 
 	MovesParser movesparser;
 	movesparser.loadFile("xml_files/Bewegingen1.0.xml");
