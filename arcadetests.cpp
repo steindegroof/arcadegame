@@ -108,7 +108,6 @@ TEST_F(ArcadeTest, addPlayer) {
     EXPECT_TRUE(field2.addPlayer(&player2));
 	std::vector<Player*> players = field2.getPlayers();
 	EXPECT_EQ(players.size(), 1);
-
 }
 
 TEST_F(ArcadeTest, HappyDoMove) {
