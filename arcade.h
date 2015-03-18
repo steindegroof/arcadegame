@@ -137,7 +137,7 @@ private:
         * \post         The obstacle is moved if possible
         * \pre          direction is a valid direction
         **/
-        bool pushObstacle(Obstacle& obstacle, const std::string& direction);
+        bool pushObstacle(PlayPiece* obstacle, const std::string& direction);
         /**
         * \brief        checks wheter the given coordinates are an
                         empty square on the field
@@ -176,6 +176,7 @@ private:
         Player* getPlayer(std::string playername) const;
         PlayPiece* getPlayPiece(int x, int y) const;
         PlayPiece* getPlayPiece(std::pair<int, int>) const;
+
 public:
         /**
         * \post Constructor must end in properlyInitialized state 
