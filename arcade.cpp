@@ -207,6 +207,9 @@ Field::Field(std::string name,const int length,const int width){
     this->playfield = new PlayPiece**[width];
     for(int i = 0; i < width; ++i){
         this->playfield[i] = new PlayPiece*[length];
+		for (int j = 0; j < length; ++j) {
+		    this->playfield[i][j] = nullptr;
+		}
     }
     this->obstacles = {};
     this->players = {};
@@ -233,7 +236,7 @@ bool Field::pushObstacle(PlayPiece* obstacle, const std::string& direction) {
     if (!this->isEmpty(newX, newY)) {
         return false;
     }
-    this->playfield[oldX][oldY] = this->playfield[newX][newY];
+    this->playfield[oldX][oldY] = nullptr;
     this->playfield[newX][newY] = obstacle;
     obstacle->setX(newX);
     obstacle->setY(newY);
@@ -242,7 +245,7 @@ bool Field::pushObstacle(PlayPiece* obstacle, const std::string& direction) {
 }
 bool Field::isEmpty(int x, int y) {
     REQUIRE(this->hasCoordinates(x, y), "invalid coordinates");
-    if (this->playfield[x][y]->isEmpty()) {
+    if (this->playfield[x][y] == nullptr) {
         return true;
     }
     else {
@@ -369,7 +372,7 @@ bool Field::doMove(const Move& move) {
     // move the player now
     int newX = newcoordinates.first;
     int newY = newcoordinates.second;
-    this->playfield[oldX][oldY] = this->playfield[newX][newY];
+    this->playfield[oldX][oldY] = nullptr;
     this->playfield[newX][newY] = player;
     player->setX(newX);
     player->setY(newY);
