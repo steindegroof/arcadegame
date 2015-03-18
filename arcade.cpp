@@ -401,10 +401,10 @@ bool Field::doMove(const Move& move) {
     REQUIRE(this->properlyInitialized(), 
 	        "Field wasn't initialized when calling doMove");
     std::string playername = move.getPlayerName();
-    if(!this->hasPlayer(player)) {
+    Player* player = this->getPlayer(playername);
+	if(!this->hasPlayer(player)) {
 	    return false;
 	}
-    Player* player = this->getPlayer(playername);
     int oldX = player->getX();
     int oldY = player->getY();
     std::string direction = move.getDirection();
