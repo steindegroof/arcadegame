@@ -125,7 +125,7 @@ private:
 	std::string name;
 	int length;
 	int width;
-	PlayPiece** playfield;
+	PlayPiece*** playfield;
 	std::vector<Obstacle*> obstacles;
 	std::vector<Player*> players;
         /**
@@ -155,8 +155,8 @@ private:
         * \param[IN]    y       the y coordinate
         * \param[OUT]   hascoordinates  whether the coordinates are valid
         **/
-        bool hasCoordinates(int x, int y);
-        bool hasCoordinates(std::pair<int, int>);
+        bool hasCoordinates(int x, int y) const;
+        bool hasCoordinates(std::pair<int, int>) const;
         /**
         * \brief        calculates the coordinates if you go in direction
                         starting from square x,y. These may fall outside
@@ -174,6 +174,8 @@ private:
         **/
         bool hasPlayer(const Player*);
         Player* getPlayer(std::string playername) const;
+        PlayPiece* getPlayPiece(int x, int y) const;
+        PlayPiece* getPlayPiece(std::pair<int, int>) const;
 public:
         /**
         * \post Constructor must end in properlyInitialized state 
