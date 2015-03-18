@@ -24,8 +24,8 @@ public:
     */
     Move(std::string playername,std::string direction);
     bool properlyInitialized();
-    std::string getPlayerName();
-    std::string getDirection();
+    const std::string getPlayerName() const;
+    const std::string getDirection() const;
 };
 
 class PlayPiece{ 
@@ -54,8 +54,8 @@ public:
     * \brief returns whether the object is movable
     **/
     bool isMovable();
-    int getX();
-    int getY();
+    int getX() const;
+    int getY() const;
     void setX(int x);
     void setY(int y);
 };
@@ -75,7 +75,7 @@ public:
     **/
     Player(int x, int y, std::string name);
     bool properlyInitialized();
-	std::string getName();
+    std::string getName() const;	
 };
 
 class Obstacle:public PlayPiece{
@@ -88,7 +88,7 @@ public:
     */
     Obstacle();
     bool properlyInitialized();
-	std::string getType();
+    std::string getType();
 };
 
 class Barrel:public Obstacle{
@@ -147,6 +147,7 @@ private:
         * \pre          the coordinates are valid for this field
         **/
         bool isEmpty(int x, int y);
+        bool isEmpty(std::pair<int, int>);
         /**
         * \brief        checks whether the given coordinates are valid
                         for this field
@@ -155,6 +156,7 @@ private:
         * \param[OUT]   hascoordinates  whether the coordinates are valid
         **/
         bool hasCoordinates(int x, int y);
+        bool hasCoordinates(std::pair<int, int>);
         /**
         * \brief        calculates the coordinates if you go in direction
                         starting from square x,y. These may fall outside
@@ -164,8 +166,14 @@ private:
         * \param[IN]    direction       the direction to move
         * \param[OUT]   coordinates     the resulting coordinates
         **/
-        std::pair<int, int> getCoordinates(int x, int y, const std::string& direction);
-		bool hasPlayer(const Player&);
+        std::pair<int, int> getCoordinates(int x, int y, const std::string& direction) const;
+        /**
+        * \brief        checks whether the given player is on the field
+        * \param[IN]    player          the player you want to check for
+        * \param[OUT]   found           whether the player was found
+        **/
+        bool hasPlayer(const Player*);
+        Player* getPlayer(std::string playername) const;
 public:
         /**
         * \post Constructor must end in properlyInitialized state 
@@ -183,14 +191,14 @@ public:
         * \param[in]	move	De te maken move
 	* \param[out]   succes	Geeft weer of de move gelukt is
         **/
-        bool doMove(Move&);
-		bool addPlayer(Player*);
-		bool addObstacle(Obstacle*);
-		std::string getName();
-		int getLength();
-		int getWidth();
-		std::vector<Obstacle*> getObstacles();
-		std::vector<Player*> getPlayers();
+        bool doMove(const Move&);
+	bool addPlayer(Player*);
+	bool addObstacle(Obstacle*);
+	std::string getName();
+	int getLength();
+	int getWidth();
+	std::vector<Obstacle*> getObstacles();
+	std::vector<Player*> getPlayers();
 };
 
 #endif
