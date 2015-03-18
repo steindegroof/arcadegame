@@ -44,7 +44,7 @@ public:
     * \pre  x > 0, y > 0
     **/
     PlayPiece(int x, int y, bool movable);
-    const bool properlyInitialized() const;
+    bool properlyInitialized() const;
     /**
     * \brief indicates whether a piece is empty. A piece with coordinates
     * (0,0) as set by the default constructor is considered empty.

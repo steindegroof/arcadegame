@@ -66,7 +66,7 @@ PlayPiece::PlayPiece(int x, int y, bool movable) {
            "constructor must end in properlyInitialized state");
 
 }
-const bool PlayPiece::properlyInitialized() const {
+bool PlayPiece::properlyInitialized() const {
     return this == _initCheck;
 }
 bool PlayPiece::isEmpty() {
@@ -401,6 +401,9 @@ bool Field::doMove(const Move& move) {
     REQUIRE(this->properlyInitialized(), 
 	        "Field wasn't initialized when calling doMove");
     std::string playername = move.getPlayerName();
+    if(!this->hasPlayer(player)) {
+	    return false;
+	}
     Player* player = this->getPlayer(playername);
     int oldX = player->getX();
     int oldY = player->getY();
