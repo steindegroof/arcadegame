@@ -31,7 +31,7 @@ bool MovesParser::parseFile() {
 			std::cout << "Onherkenbaar element." << std::endl;
 		}
 	}
-	return true; //bewegingen kunnen eigenlijk niet false worden... We negeren alle foutieve gewoon.
+	return true; //bewegingen kunnen eigenlijk niet false worden... We negeren alle foutieve gewoon
 }
 
 bool MovesParser::writeFile(std::string filename){

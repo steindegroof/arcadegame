@@ -112,7 +112,7 @@ bool FieldParser::parseFile() {
 	        std::cerr << "Onherkenbaar element." << std::endl;
 	    }
 	}
-	return true; //als we hier geraken is het parsen gelukt
+	return true; //als we hier geraken is het parsen gelukt.
 }
 
 bool FieldParser::writeFile(std::string filename){
