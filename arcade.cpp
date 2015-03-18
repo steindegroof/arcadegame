@@ -69,11 +69,6 @@ PlayPiece::PlayPiece(int x, int y, bool movable) {
 bool PlayPiece::properlyInitialized() const {
     return this == _initCheck;
 }
-bool PlayPiece::isEmpty() {
-    REQUIRE(this->properlyInitialized(), 
-	        "PlayPiece wasn't initialized when calling isEmpty");
-    return this->x == 0 && this->y == 0;
-}
 bool PlayPiece::isMovable() {
     REQUIRE(this->properlyInitialized(), 
 	        "PlayPiece wasn't initialized when calling isMovable");
@@ -114,7 +109,7 @@ Player::Player() {
 
 }
 Player::Player(int x, int y, std::string name) {
-    REQUIRE(x > 0 && y > 0, "coordinates must be greater than zero");
+    REQUIRE(x >= 0 && y >= 0, "coordinates must be >= 0");
     _initCheck = this;
     this->name = name;
     this->x = x;
@@ -164,7 +159,7 @@ Barrel::Barrel() {
 
 }
 Barrel::Barrel(int x, int y,bool movable) {
-    REQUIRE(x > 0 && y > 0, "coordinates must be greater than zero");
+    REQUIRE(x >= 0 && y >= 0, "coordinates must be >= 0");
     _initCheck = this;
     this->x = x;
     this->y = y;
@@ -189,7 +184,7 @@ Wall::Wall() {
 
 }
 Wall::Wall(int x, int y, bool movable) {
-    REQUIRE(x >= 0 && y >= 0, "coordinates must be greater than zero");
+    REQUIRE(x >= 0 && y >= 0, "coordinates must be >= 0");
     _initCheck = this;
     this->x = x;
     this->y = y;
