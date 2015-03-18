@@ -298,7 +298,7 @@ Player* Field::getPlayer(std::string playername) const {
             return *i;
         }
     }
-
+	return nullptr;
 }
 bool Field::hasPlayer(const Player* player) {
     return std::find(players.begin(),players.end(),player) != players.end();
@@ -321,7 +321,7 @@ std::vector<Obstacle*> Field::getObstacles(){
 std::vector<Player*> Field::getPlayers(){
 	return players;
 }
-bool Field::doMove(const Move& move) {
+bool Field::doMove(const Move& move) {/*
     std::string playername = move.getPlayerName();
     Player* player = this->getPlayer(playername);
     int oldX = player->getX();
@@ -345,6 +345,6 @@ bool Field::doMove(const Move& move) {
     this->playfield[oldX][oldY] = this->playfield[newX][newY];
     this->playfield[newX][newY] = *player;
     player->setX(newX);
-    player->setY(newY);
+    player->setY(newY);*/
     return true;
 }
