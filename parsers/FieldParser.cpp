@@ -118,35 +118,34 @@ bool FieldParser::parseFile() {
 bool FieldParser::writeFile(std::string filename){
 	std::ofstream myfile;
 	std::ofstream output;
-	output << "Bestand: " << filename << std::endl << std::endl;
-  	output << "Het huidige speelveld is " << field->getName() << ":" << std::endl
-		   << "Eigenschappen van dit veld:" << std::endl
-		   << "-Breedte " << field->getWidth() << std::endl
-		   << "-Lengte " << field->getLength() << std::endl << std::endl;
-	std::vector<Player*> players = field->getPlayers();
-	std::vector<Player*>::iterator it_pl;
-	for(it_pl = players.begin(); it_pl!= players.end(); it_pl++){
-		output << "Speler " << (*it_pl)->getName() << " bevindt zich in dit speelveld op positie (" 
-			   << (*it_pl)->getX() << "," << (*it_pl)->getY() << ")." << std::endl << std::endl;
-	}
-	std::vector<Obstacle*> obstacles = field->getObstacles();
-	std::vector<Obstacle*>::iterator it_obst;
-	for(it_obst = obstacles.begin(); it_obst != obstacles.end(); it_obst++){
-		if((*it_obst)->isMovable()){
-			output << "Er bevindt zich een " << (*it_obst)->getType() << " op positie ("
-				   << (*it_obst)->getX() << "," << (*it_obst)->getY() << ")." << std::endl << std::endl;
-		}
-	}
+//	output << "Bestand: " << filename << std::endl << std::endl;
+//  	output << "Het huidige speelveld is " << field->getName() << ":" << std::endl
+//		   << "Eigenschappen van dit veld:" << std::endl
+//		   << "-Breedte " << field->getWidth() << std::endl
+//		   << "-Lengte " << field->getLength() << std::endl << std::endl;
+//	std::vector<Player*> players = field->getPlayers();
+//	std::vector<Player*>::iterator it_pl;
+//	for(it_pl = players.begin(); it_pl!= players.end(); it_pl++){
+//		output << "Speler " << (*it_pl)->getName() << " bevindt zich in dit speelveld op positie (" 
+//			   << (*it_pl)->getX() << "," << (*it_pl)->getY() << ")." << std::endl << std::endl;
+//	}
+//	std::vector<Obstacle*> obstacles = field->getObstacles();
+//	std::vector<Obstacle*>::iterator it_obst;
+//	for(it_obst = obstacles.begin(); it_obst != obstacles.end(); it_obst++){
+//		if((*it_obst)->isMovable()){
+//			output << "Er bevindt zich een " << (*it_obst)->getType() << " op positie ("
+//				   << (*it_obst)->getX() << "," << (*it_obst)->getY() << ")." << std::endl << std::endl;
+//		}
+//	}
   	myfile.open(filename);
 	if (myfile.fail()) {
 	    std::cerr << "Couldn't open file " << filename << " for writing" << std::endl;
 		std::cerr << "Writing to console..." << std::endl;
-		std::cout << output;
+		std::cout << *this;
 	    return false;
     }
 	else{
-		myfile << "wtf?";
-		myfile << output;
+		myfile << *this;
 		myfile.close();
 	}
     return true;
@@ -154,4 +153,27 @@ bool FieldParser::writeFile(std::string filename){
 
 Field* FieldParser::getField() {
 	 return field;
+}
+std::ostream& operator<<(std::ostream& output, const FieldParser& fp) {
+	//output << "Bestand: " << filename << std::endl << std::endl;
+  	output << "Het huidige speelveld is " << fp.field->getName() << ":" << std::endl
+		   << "Eigenschappen van dit veld:" << std::endl
+		   << "-Breedte " << fp.field->getWidth() << std::endl
+		   << "-Lengte " << fp.field->getLength() << std::endl << std::endl;
+	std::vector<Player*> players = fp.field->getPlayers();
+	std::vector<Player*>::iterator it_pl;
+	for(it_pl = players.begin(); it_pl!= players.end(); it_pl++){
+		output << "Speler " << (*it_pl)->getName() << " bevindt zich in dit speelveld op positie (" 
+			   << (*it_pl)->getX() << "," << (*it_pl)->getY() << ")." << std::endl << std::endl;
+	}
+	std::vector<Obstacle*> obstacles = fp.field->getObstacles();
+	std::vector<Obstacle*>::iterator it_obst;
+	for(it_obst = obstacles.begin(); it_obst != obstacles.end(); it_obst++){
+		if((*it_obst)->isMovable()){
+			output << "Er bevindt zich een " << (*it_obst)->getType() << " op positie ("
+				   << (*it_obst)->getX() << "," << (*it_obst)->getY() << ")." << std::endl << std::endl;
+		}
+	}
+	return output;
+
 }

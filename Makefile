@@ -16,6 +16,7 @@ CPPFLAGS += -MD -MP
 CPPFLAGS += -isystem $(GTEST_DIR)/include
 
 OBJS =		parsers/AbstractParser.o parsers/FieldParser.o parsers/MovesParser.o tinyxml/tinyxml.o tinyxml/tinystr.o tinyxml/tinyxmlerror.o tinyxml/tinyxmlparser.o arcade.o
+TESTOBJS = 	arcadetests.o
 SRCS =		arcademain.cpp #arcadetests.cpp
 TARGET =	arcademain arcadetests
 
@@ -52,7 +53,7 @@ gtest_main.a : gtest-all.o gtest_main.o
 arcademain : $(OBJS) arcademain.cpp
 	$(CXX) $(CXXFLAGS) -o $@ $^
 #-lpthread
-arcadetests : $(OBJS) arcadetests.o gtest_main.a
+arcadetests : $(OBJS) $(TESTOBJS) gtest_main.a
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -o $@ $^ -lpthread
 
 arcadetests.o : arcadetests.cpp $(GTEST_HEADERS)

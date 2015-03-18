@@ -14,6 +14,7 @@
 class FieldParser: public AbstractParser{
 private:
 	Field* field;
+	friend std::ostream& operator<<(std::ostream&, const FieldParser&);
 public:
 	FieldParser();
 	virtual ~FieldParser();
