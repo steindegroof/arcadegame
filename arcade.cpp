@@ -253,7 +253,7 @@ bool Field::isEmpty(std::pair<int, int> coordinates) {
     return this->isEmpty(coordinates.first, coordinates.second);
 }
 bool Field::hasCoordinates(int x, int y) {
-    if (x < 1 || y < 1 || x > this->width || y > this->length) {
+    if (x < 0 || y < 0 || x > this->width || y > this->length) {
         return false;
     }
     else {
@@ -277,11 +277,14 @@ bool Field::addPlayer(Player* player){
 	}
 	int x = player->getX();
 	int y = player->getY();
-	int min_coo = 0;
-	if( (x >= min_coo && x <= this->getWidth()) && ( y>= min_coo && y <= this->getLength() ) ){ //zien of player binnen veld zit.
+	if(hasCoordinates(std::make_pair(x,y))){ //zien of player binnen veld zit.
 		if(!isEmpty(x,y)){
-			std::cerr << "Er bevind zich al een entiteit op de positie waarop je de speler wil initialiseren." << std::endl;
+			std::cerr << "Er bevind zich al een entiteit op de positie waar je de speler wil initialiseren." << std::endl;
 			return false;
+		}
+		else{
+			playfield[x][y] = *player; //////// ik wil pointer...
+			players.push_back(player);
 		}
 	}
 	else{
@@ -303,8 +306,24 @@ Player* Field::getPlayer(std::string playername) const {
 bool Field::hasPlayer(const Player* player) {
     return std::find(players.begin(),players.end(),player) != players.end();
 }
-bool Field::addObstacle(Obstacle*){
-    return true;//nog implementeren
+bool Field::addObstacle(Obstacle* obstacle){
+    int x = obstacle->getX();
+	int y = obstacle->getY();
+	if(hasCoordinates(std::make_pair(x,y))){ //zien of obstacle binnen veld zit.
+		if(!isEmpty(x,y)){
+			std::cerr << "Er bevind zich al een entiteit op de positie waar je het obstakel wil initialiseren." << std::endl;
+			return false;
+		}
+		else{
+			playfield[x][y] = *obstacle; //////// ik wil pointer...
+			obstacles.push_back(obstacle);
+		}
+	}
+	else{
+		std::cerr << "Het obstakel dat je wou toevoegen heeft coordinaten die niet binnen het speelveld liggen." << std::endl;
+		return false;
+	}
+	return true;
 }
 std::string Field::getName(){
 	return name;
