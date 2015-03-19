@@ -5,12 +5,21 @@
 
 FieldParser::FieldParser() {
 	field = nullptr;
+	_initCheck = this;
+	ENSURE(properlyInitialized(),
+           "constructor must end in properlyInitialized state");
 }
 
 FieldParser::~FieldParser() {
 }
 
+bool FieldParser::properlyInitialized() const{
+	return this == _initCheck;
+}
+
 bool FieldParser::parseFile() {
+	REQUIRE(this->properlyInitialized(), 
+	        "FieldParser wasn't initialized when calling parseFile");
 	REQUIRE(this->getRootName() == "VELD", 
 	        "FieldParser verwacht als rootname 'VELD'. Dit werd niet gevonden.");
 	const char* fieldname = readFirstChildElement("NAAM",this->root);
@@ -117,6 +126,8 @@ bool FieldParser::parseFile() {
 }
 
 bool FieldParser::writeFile(std::string filename){
+	REQUIRE(this->properlyInitialized(), 
+	        "FieldParser wasn't initialized when calling writeFile");
 	std::ofstream myfile;
 	std::ofstream output;
   	myfile.open(filename);
@@ -134,6 +145,8 @@ bool FieldParser::writeFile(std::string filename){
 }
 
 Field* FieldParser::getField() {
+	REQUIRE(this->properlyInitialized(), 
+	        "FieldParser wasn't initialized when calling getField");
 	 return field;
 }
 std::ostream& operator<<(std::ostream& output, const FieldParser& fp) {

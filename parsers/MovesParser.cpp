@@ -3,13 +3,22 @@
 #include "../DesignByContract.h"
 
 MovesParser::MovesParser() {
+	_initCheck = this;
 	moves = new std::vector<Move*>;
+	ENSURE(properlyInitialized(),
+           "constructor must end in properlyInitialized state");
 }
 
 MovesParser::~MovesParser() {
 }
 
+bool MovesParser::properlyInitialized() const{
+	return this == _initCheck;
+}
+
 bool MovesParser::parseFile() {
+	REQUIRE(this->properlyInitialized(), 
+	        "MovesParser wasn't initialized when calling parseFile");
 	REQUIRE(this->getRootName() == "BEWEGINGEN", 
 	        "MovesParser verwacht als rootname 'BEWEGINGEN'. Dit werd niet gevonden.");
 	for(TiXmlElement* e = this->root->FirstChildElement(); e != NULL; e = e->NextSiblingElement()){
@@ -37,6 +46,8 @@ bool MovesParser::parseFile() {
 }
 
 bool MovesParser::writeFile(std::string filename){
+	REQUIRE(this->properlyInitialized(), 
+	        "MovesParser wasn't initialized when calling writeFile");
 	std::ofstream myfile;
   	myfile.open(filename);
 	if (myfile.fail()) {
@@ -52,6 +63,8 @@ bool MovesParser::writeFile(std::string filename){
 }
 
 std::vector<Move*>* MovesParser::getMoves() {
+	REQUIRE(this->properlyInitialized(), 
+	        "MovesParser wasn't initialized when calling getMoves");
 	 return moves;
 }
 

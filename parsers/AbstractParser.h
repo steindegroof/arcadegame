@@ -16,12 +16,13 @@ protected:
 	TiXmlElement * root;
 	TiXmlDocument doc;
 	const char* readFirstChildElement(const char*,TiXmlElement*);
+	AbstractParser* _initCheck;
 public:
 /**
  * \post Constructor must end in properlyInitialized state
  */
 	AbstractParser();
-	bool properlyInitialized();
+	bool properlyInitialized() const;
 	virtual ~AbstractParser();
 
 /**
@@ -37,9 +38,15 @@ public:
  * \pre AbstractParser must be initialized when calling loadFile.
  */
 	bool loadFile(std::string filename);
-	
+/**
+ * Parses the XML files. If parsing was succesfull returns true. Otherwise false is returned.
+ * \pre AbstractParser must be initialized when calling parseFile.
+ */	
 	virtual bool parseFile() = 0;
-	
+/**
+ * Writes parsed data to file. if file could not be opened, data will write to console.
+ * \pre AbstractParser must be initialized when calling writeFile.
+ */	
 	virtual bool writeFile(std::string filename) = 0;
 /**
  * Returns name of the root.

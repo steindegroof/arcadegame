@@ -6,28 +6,30 @@
 #include "../tinyxml/tinyxml.h"
 
 /*
- * \class FieldParser
+ * \class MovesParser
  * This Parser is a subclass of an AbstractParser, it can therefore load any XML file.
- * However it is meant to parse Fields by using the parseField method.
+ * However it is meant to parse Moves by using the parseFile method.
  */
 class MovesParser: public AbstractParser{
 private:
 	std::vector<Move*>* moves;
-    friend std::ostream& operator<<(std::ostream&, const MovesParser&);
+	MovesParser* _initCheck;
+    	friend std::ostream& operator<<(std::ostream&, const MovesParser&);
 public:
 	MovesParser();
+	bool properlyInitialized() const;
 	virtual ~MovesParser();
-
 	/*
-	 * This method expects the TiXmlElement that is passed as a parameter to represent an entire catalog of CDs.
-	 * It will then parse said catalog and return it as a pointer to a vector of CD*'s.
+	 * Parses an xml file into a vector of Move*'s
 	 */
 	bool parseFile();
-	
+	/*
+	 * Writes the Moves to a file
+	 */
 	bool writeFile(std::string filename);
 
 	/*
-	 * Returns a pointer to the parsed vector of CD*'s
+	 * Returns a pointer to the parsed vector of Move*'s
 	 */
 	std::vector<Move*>* getMoves();
 };
