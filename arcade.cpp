@@ -300,6 +300,7 @@ std::pair<int, int> Field::getCoordinates(int x, int y, const
 bool Field::addPlayer(Player* player){
     REQUIRE(this->properlyInitialized(), 
 	        "Field wasn't initialized when calling addPlayer");
+    REQUIRE(this->hasCoordinates(player->getX(),player->getY()), "invalid coordinates when calling addPlayer");
     if(hasPlayer(player)){
 		std::cerr << "De speler die je wou toevoegen bestaat al." << std::endl;
 		return false;
@@ -352,6 +353,7 @@ bool Field::hasPlayer(const Player* player) {
 bool Field::addObstacle(Obstacle* obstacle){
     REQUIRE(this->properlyInitialized(), 
 	        "Field wasn't initialized when calling addObstacle");
+    REQUIRE(this->hasCoordinates(obstacle->getX(),obstacle->getY()), "invalid coordinates when calling addObstacle");
     int x = obstacle->getX();
 	int y = obstacle->getY();
 	if(hasCoordinates(x,y)){ //zien of obstacle binnen veld zit.
