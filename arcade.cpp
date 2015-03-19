@@ -402,6 +402,7 @@ std::vector<Player*> Field::getPlayers(){
 bool Field::doMove(const Move& move) {
     REQUIRE(this->properlyInitialized(), 
 	        "Field wasn't initialized when calling doMove");
+	REQUIRE(move.getPlayerName() != "","Empty playername when calling doMove.");
     std::string playername = move.getPlayerName();
     Player* player = this->getPlayer(playername);
 	if(!this->hasPlayer(player)) {

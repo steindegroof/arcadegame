@@ -180,3 +180,20 @@ TEST_F(ArcadeOutputTest, FieldParser_Open_file_failed){
 	EXPECT_TRUE(fieldparser.parseFile());
 	EXPECT_FALSE(fieldparser.writeFile("nonexisting/file.txt"));
 }
+TEST_F(ArcadeOutputTest, FieldParser_FieldAfterMoves_move_barrel){
+	ASSERT_TRUE(DirectoryExists("testOutput/expected_output"));
+	ASSERT_TRUE(DirectoryExists("testInput"));
+	//if directory doesn't exist then no need in proceeding with the test
+	EXPECT_TRUE(movesparser.loadFile("xml_files/Bewegingen1.0.xml"));
+	EXPECT_TRUE(movesparser.parseFile());
+	EXPECT_TRUE(fieldparser.loadFile("testInput/Speelveld_ton_moven.xml"));
+	EXPECT_TRUE(fieldparser.parseFile());
+	Field* field = fieldparser.getField();
+	std::vector<Move*>* moves = movesparser.getMoves();
+	std::vector<Move*>::iterator it;
+	for( it = moves->begin(); it!=moves->end(); it++){
+		field->doMove(**it);
+	}
+	EXPECT_TRUE(fieldparser.writeFile("testOutput/field_after_moves_met_ton.txt"));
+	EXPECT_TRUE(FileCompare("testOutput/field_after_moves_met_ton.txt","testOutput/expected_output/field_after_moves_met_ton_template.txt"));
+}

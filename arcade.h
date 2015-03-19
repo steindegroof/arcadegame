@@ -197,6 +197,8 @@ public:
     * \brief verplaats een playpiece volgens de opgegeven move.
     * \param[in]	move	De te maken move
 	* \param[out]   succes	Geeft weer of de move gelukt is
+	* \pre          properlyInitialized
+	* \pre          Player must have nonempty name.
     **/
     bool doMove(const Move&);
 	/** 
