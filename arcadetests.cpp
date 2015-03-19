@@ -5,6 +5,9 @@
 
 
 #include "arcade.h"
+#include "parsers/AbstractParser.h"
+#include "parsers/FieldParser.h"
+#include "parsers/MovesParser.h"
 
 class ArcadeTest: public ::testing::Test {
 protected:
@@ -37,7 +40,8 @@ Declares the variables your tests want to use.
         Wall wall;
         Player player;
         Field field;
-
+        FieldParser fieldparser;
+	MovesParser movesparser;
 
 };
 
@@ -101,6 +105,15 @@ TEST_F(ArcadeTest, FieldConstructor) {
 	EXPECT_EQ(field2.getWidth(), 10);
 	EXPECT_EQ(field2.getName(), "naam");
 }
+TEST_F(ArcadeTest, FieldParserConstructor) {
+	EXPECT_TRUE(fieldparser.properlyInitialized());
+	EXPECT_EQ(fieldparser.getField(), nullptr);
+}
+TEST_F(ArcadeTest, MovesParserConstructor) {
+	EXPECT_TRUE(movesparser.properlyInitialized());
+	EXPECT_EQ(movesparser.getMoves()->size(), 0);
+}
+
 TEST_F(ArcadeTest, addPlayer) {
     Field field2("veld", 5, 10);
 	Player player2(1, 3, "speler");
@@ -179,12 +192,18 @@ TEST_F(ArcadeTest, FieldSquareIsEmpty) {
     Field field1("veld",2,8);
     EXPECT_TRUE(field1.isEmpty(0,0));
     EXPECT_TRUE(field1.isEmpty(7,1));
+    // adding a player and a barrel to the field, verify 
     Player player1(7, 1, "speler");
     field1.addPlayer(&player1);
     Barrel barrel1(0, 0, true);
     field1.addObstacle(&barrel1);
     EXPECT_FALSE(field1.isEmpty(0,0));
     EXPECT_FALSE(field1.isEmpty(7,1));
+    // test overloaded function operating on pairs
+    EXPECT_FALSE(field1.isEmpty(std::make_pair(0,0)));
+    EXPECT_FALSE(field1.isEmpty(std::make_pair(7,1)));
+    EXPECT_TRUE(field1.isEmpty(std::make_pair(1,1)));
+
 }
 
 TEST_F(ArcadeTest, FieldHasCoordinates) {
@@ -204,3 +223,14 @@ TEST_F(ArcadeTest, FieldGetCoordinates) {
     EXPECT_EQ(field1.getCoordinates(0,0,"LINKS"),std::make_pair(-1,0));
     EXPECT_EQ(field1.getCoordinates(-1,-10,"RECHTS"),std::make_pair(0,-10));
 }
+TEST_F(ArcadeTest, FieldGetPlayPiece) {
+    Field field1("veld",10,8);
+    Player player1(7, 1, "speler");
+    field1.addPlayer(&player1);
+    Barrel barrel1(0, 0, true);
+    field1.addObstacle(&barrel1);
+    EXPECT_EQ(field1.getPlayPiece(0,0), &barrel1);
+    EXPECT_EQ(field1.getPlayPiece(7,1), &player1);
+    EXPECT_EQ(field1.getPlayPiece(1,1), nullptr);
+}
+
