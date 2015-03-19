@@ -111,3 +111,56 @@ TEST_F(ArcadeInputTest, FieldParser_missing_dimension){
 	EXPECT_TRUE(fieldparser.loadFile("testInput/speelveld_missing_dimension.xml"));
 	EXPECT_FALSE(fieldparser.parseFile());
 }
+/**
+Test of correcte input voor speelveld kan parsen.
+*/
+TEST_F(ArcadeInputTest, FieldParser_HappyDay){
+	ASSERT_TRUE(DirectoryExists("xml_files"));
+	EXPECT_TRUE(fieldparser.loadFile("xml_files/Speelveld1.0.xml"));
+	EXPECT_TRUE(fieldparser.parseFile());
+	Field* field = fieldparser.getField();
+	EXPECT_NE(field,nullptr);
+}
+/**
+Test of correcte input voor moves kan parsen.
+*/
+TEST_F(ArcadeInputTest, MovesParser_HappyDay){
+	ASSERT_TRUE(DirectoryExists("xml_files"));
+	EXPECT_TRUE(movesparser.loadFile("xml_files/Bewegingen1.0.xml"));
+	EXPECT_TRUE(movesparser.parseFile());
+	EXPECT_NE(movesparser.getMoves()->size(),0);
+}
+/**
+Test of xml bestand van moves met een ongeldige move in, gewoon parsed, maar deze foutieve move negeert.
+*/
+TEST_F(ArcadeInputTest, MovesParser_no_playername){
+	ASSERT_TRUE(DirectoryExists("testInput"));
+	EXPECT_TRUE(movesparser.loadFile("testInput/Bewegingen_no_playername.xml"));
+	EXPECT_TRUE(movesparser.parseFile());
+}
+/**
+Test of xml bestand van moves met geen enkele geldige move gewoon parsed, maar resulteert in 0 moves.
+*/
+TEST_F(ArcadeInputTest, MovesParser_no_valid_moves){
+	ASSERT_TRUE(DirectoryExists("testInput"));
+	EXPECT_TRUE(movesparser.loadFile("testInput/Bewegingen_no_valid_moves.xml"));
+	EXPECT_TRUE(movesparser.parseFile());
+	std::vector<Move*>* moves = movesparser.getMoves();
+	EXPECT_EQ(moves->size(), 0);
+}
+/**
+Test of assertions falen bij overtreden van contract fieldparser
+*/
+TEST_F(ArcadeInputTest, FieldParser_DesignByContract){
+	ASSERT_TRUE(DirectoryExists("xml_files"));
+	EXPECT_TRUE(fieldparser.loadFile("xml_files/Bewegingen1.0.xml")); //bewegingen inladen bij fieldparser
+	EXPECT_DEATH(fieldparser.parseFile(),"FieldParser verwacht als rootname 'VELD'. Dit werd niet gevonden.");
+}
+/**
+Test of assertions falen bij overtreden van contract movesparser
+*/
+TEST_F(ArcadeInputTest, MovesParser_DesignByContract){
+	ASSERT_TRUE(DirectoryExists("xml_files"));
+	EXPECT_TRUE(movesparser.loadFile("xml_files/Speelveld1.0.xml")); //bewegingen inladen bij fieldparser
+	EXPECT_DEATH(movesparser.parseFile(),"MovesParser verwacht als rootname 'BEWEGINGEN'. Dit werd niet gevonden.");
+}

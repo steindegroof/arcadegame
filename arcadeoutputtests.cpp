@@ -162,4 +162,21 @@ TEST_F(ArcadeOutputTest, MovesParser_MovesAfterMoves){
 	EXPECT_TRUE(movesparser.writeFile("testOutput/moves_after_moves.txt"));
 	EXPECT_TRUE(FileCompare("testOutput/moves_after_moves.txt","testOutput/expected_output/moves_after_moves_template.txt"));
 }
-
+/**
+Test of movesparser naar console schrijft als het openen van file mislukt.
+*/
+TEST_F(ArcadeOutputTest, MovesParser_Open_file_failed){
+	ASSERT_FALSE(DirectoryExists("nonexisting"));
+	EXPECT_TRUE(movesparser.loadFile("xml_files/Bewegingen1.0.xml"));
+	EXPECT_TRUE(movesparser.parseFile());
+	EXPECT_FALSE(movesparser.writeFile("nonexisting/file.txt"));
+}
+/**
+Test of fieldparser naar console schrijft als het openen van file mislukt.
+*/
+TEST_F(ArcadeOutputTest, FieldParser_Open_file_failed){
+	ASSERT_FALSE(DirectoryExists("nonexisting"));
+	EXPECT_TRUE(fieldparser.loadFile("xml_files/Speelveld1.0.xml"));
+	EXPECT_TRUE(fieldparser.parseFile());
+	EXPECT_FALSE(fieldparser.writeFile("nonexisting/file.txt"));
+}
