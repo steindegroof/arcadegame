@@ -85,7 +85,7 @@ Test of parsen mislukt als een entiteit buiten het veld ligt.
 TEST_F(ArcadeInputTest, FieldParser_out_of_range){
 	ASSERT_TRUE(DirectoryExists("testInput"));
 	EXPECT_TRUE(fieldparser.loadFile("testInput/speelveld_out_of_range.xml"));
-	EXPECT_FALSE(fieldparser.parseFile());
+	EXPECT_DEATH(fieldparser.parseFile(),"invalid coordinates when calling addObstacle");
 }
 /**
 Test of parsen mislukt als een veld negatieve coordinaten heeft.
