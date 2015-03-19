@@ -8,7 +8,6 @@
 
 class ArcadeTest: public ::testing::Test {
 protected:
-	friend  Field;
 	// You should make the members protected s.t. they can be
 	// accessed from sub-classes.
 
@@ -175,4 +174,33 @@ TEST_F(ArcadeTest, DoMove) {
     EXPECT_TRUE(field3.doMove(moveUP)); 
     // moving into barrel blocked by edge
 	EXPECT_FALSE(field3.doMove(moveRIGHT));
+}
+TEST_F(ArcadeTest, FieldSquareIsEmpty) {
+    Field field1("veld",2,8);
+    EXPECT_TRUE(field1.isEmpty(0,0));
+    EXPECT_TRUE(field1.isEmpty(7,1));
+    Player player1(7, 1, "speler");
+    field1.addPlayer(&player1);
+    Barrel barrel1(0, 0, true);
+    field1.addObstacle(&barrel1);
+    EXPECT_FALSE(field1.isEmpty(0,0));
+    EXPECT_FALSE(field1.isEmpty(7,1));
+}
+
+TEST_F(ArcadeTest, FieldHasCoordinates) {
+    Field field1("veld",1,88);
+    EXPECT_TRUE(field1.hasCoordinates(0,0));
+    EXPECT_TRUE(field1.hasCoordinates(87,0));
+    EXPECT_TRUE(field1.hasCoordinates(10,0)); 
+    EXPECT_FALSE(field1.hasCoordinates(0,1));  
+    EXPECT_FALSE(field1.hasCoordinates(100,0));
+    EXPECT_FALSE(field1.hasCoordinates(-10,0));
+}
+TEST_F(ArcadeTest, FieldGetCoordinates) {
+    Field field1("veld",10,8);
+    EXPECT_EQ(field1.getCoordinates(0,0,"OMHOOG"),std::make_pair(0,1));
+    EXPECT_EQ(field1.getCoordinates(100,100,"OMHOOG"),std::make_pair(100,101));
+    EXPECT_EQ(field1.getCoordinates(0,0,"OMLAAG"),std::make_pair(0,-1));
+    EXPECT_EQ(field1.getCoordinates(0,0,"LINKS"),std::make_pair(-1,0));
+    EXPECT_EQ(field1.getCoordinates(-1,-10,"RECHTS"),std::make_pair(0,-10));
 }

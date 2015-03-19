@@ -134,6 +134,7 @@ protected:
     * \pre          direction is a valid direction
     **/
     bool pushObstacle(PlayPiece* obstacle, const std::string& direction);
+public:
     /**
     * \brief        checks wheter the given coordinates are an
                     empty square on the field
@@ -171,8 +172,6 @@ protected:
     bool hasPlayer(const Player*);
     PlayPiece* getPlayPiece(int x, int y) const;
     PlayPiece* getPlayPiece(std::pair<int, int>) const;
-
-public:
     /**
     * \post Constructor must end in properlyInitialized state 
     */
