@@ -105,9 +105,23 @@ TEST_F(ArcadeTest, FieldConstructor) {
 TEST_F(ArcadeTest, addPlayer) {
     Field field2("veld", 5, 10);
 	Player player2(1, 3, "speler");
+	//Player player3(2, 4, "speler"); // invalid: duplicate name
+	Player player4(1, 3, "speelster"); // invalid: square occupied
+	Player player5(2, 3, "speelster"); // valid
+	//Player player6(-1, 3, "valsspeler"); // invalid: negative x
+	Player player7(2, 10, "fluitspeler"); // invalid: y too high
     EXPECT_TRUE(field2.addPlayer(&player2));
-	std::vector<Player*> players = field2.getPlayers();
-	EXPECT_EQ(players.size(), 1);
+    EXPECT_FALSE(field2.addPlayer(&player2)); // can't add again
+	EXPECT_EQ(field2.getPlayers().size(), 1);
+	EXPECT_EQ(field2.getPlayer("speler"), &player2);
+    //EXPECT_FALSE(field2.addPlayer(&player3));
+    EXPECT_FALSE(field2.addPlayer(&player4));
+    EXPECT_TRUE(field2.addPlayer(&player5));
+    //EXPECT_FALSE(field2.addPlayer(&player6));
+    EXPECT_FALSE(field2.addPlayer(&player7));
+	EXPECT_EQ(field2.getPlayers().size(), 2);
+	EXPECT_EQ(field2.getPlayer("speelster")->getX(), 2);
+    EXPECT_EQ(field2.getPlayer("valsspeler"), nullptr);
 }
 
 TEST_F(ArcadeTest, HappyDoMove) {

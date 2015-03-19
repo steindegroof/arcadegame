@@ -354,21 +354,23 @@ bool Field::addObstacle(Obstacle* obstacle){
 	        "Field wasn't initialized when calling addObstacle");
     int x = obstacle->getX();
 	int y = obstacle->getY();
-	if(hasCoordinates(std::make_pair(x,y))){ //zien of obstacle binnen veld zit.
+	if(hasCoordinates(x,y)){ //zien of obstacle binnen veld zit.
 		if(!isEmpty(x,y)){
 			std::cerr << "Er bevind zich al een entiteit op de positie waar je het obstakel wil initialiseren." << std::endl;
 			return false;
 		}
 		else{
-			playfield[x][y] = obstacle; //////// ik wil pointer...
+			playfield[x][y] = obstacle; 	
 			obstacles.push_back(obstacle);
+			return true;
 		}
 	}
 	else{
 		std::cerr << "Het obstakel dat je wou toevoegen heeft coordinaten die niet binnen het speelveld liggen." << std::endl;
 		return false;
 	}
-	return true;
+	// We shouldn't get to this point.. 
+	return false;
 }
 std::string Field::getName(){
     REQUIRE(this->properlyInitialized(), 
