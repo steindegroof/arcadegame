@@ -248,10 +248,10 @@ bool Field::pushObstacle(PlayPiece* obstacle, const std::string& direction) {
                                                            direction);
     int newX = destination.first;
     int newY = destination.second;
-    if (!this->hasCoordinates(newX, newY)) {
+    if (!this->hasCoordinates(destination)) {
         return false;
     }
-    if (!this->isEmpty(newX, newY)) {
+    if (!this->isEmpty(destination)) {
         return false;
     }
     this->playfield[oldX][oldY] = nullptr;

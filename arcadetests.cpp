@@ -123,8 +123,22 @@ TEST_F(ArcadeTest, addPlayer) {
 	EXPECT_EQ(field2.getPlayer("speelster")->getX(), 2);
     EXPECT_EQ(field2.getPlayer("valsspeler"), nullptr);
 }
+TEST_F(ArcadeTest, addObstacle) {
+    Field field2("veld", 5, 10);
+	Barrel barrel2(1, 3, true);
+	Barrel barrel3(1, 3, true); // invalid: square occupied
+	Barrel barrel4(2, 3, true); // valid
+	Barrel barrel5(2, 10, true); // invalid: y too high
+    EXPECT_TRUE(field2.addObstacle(&barrel2));
+    EXPECT_FALSE(field2.addObstacle(&barrel2)); // can't add again
+	EXPECT_EQ(field2.getObstacles().size(), 1);
+    EXPECT_FALSE(field2.addObstacle(&barrel3));
+    EXPECT_TRUE(field2.addObstacle(&barrel4));
+    EXPECT_FALSE(field2.addObstacle(&barrel5));
+	EXPECT_EQ(field2.getObstacles().size(), 2);
+}
 
-TEST_F(ArcadeTest, HappyDoMove) {
+TEST_F(ArcadeTest, DoMove) {
     Field field3("veld", 5, 10);
 	Player player3(0, 3, "speler");
 	field3.addPlayer(&player3);
@@ -133,14 +147,14 @@ TEST_F(ArcadeTest, HappyDoMove) {
 	Move moveDOWN("speler", "OMLAAG");
 	Move moveLEFT("speler", "LINKS");
 	Move moveRIGHT("speler", "RECHTS");
-    field3.doMove(moveUP);
+    EXPECT_TRUE(field3.doMove(moveUP));
 	EXPECT_EQ(player3.getX(), 0);
 	EXPECT_EQ(player3.getY(), 4);
     // try to move off the left, then top, then bottomn then right
-    field3.doMove(moveLEFT);
+    EXPECT_FALSE(field3.doMove(moveLEFT));
    	EXPECT_EQ(player3.getX(), 0);
 	EXPECT_EQ(player3.getY(), 4);
-    field3.doMove(moveUP);
+    EXPECT_FALSE(field3.doMove(moveUP));
    	EXPECT_EQ(player3.getX(), 0);
 	EXPECT_EQ(player3.getY(), 4);
     for (int i = 0; i < 11; i++) {
@@ -150,6 +164,15 @@ TEST_F(ArcadeTest, HappyDoMove) {
    	EXPECT_EQ(player3.getX(), 9);
 	EXPECT_EQ(player3.getY(), 0);
     // and now with some obstacles
-
-
+	Barrel barrel2(8, 0, true);
+	Barrel barrel3(9, 1, true); 
+	Barrel barrel4(9, 2, true);
+	field3.addObstacle(&barrel2);
+	field3.addObstacle(&barrel3);
+	field3.addObstacle(&barrel4);
+	EXPECT_FALSE(field3.doMove(moveUP)); // moving into double barrel
+    EXPECT_TRUE(field3.doMove(moveLEFT)); // moving into single barrel
+    EXPECT_TRUE(field3.doMove(moveUP)); 
+    // moving into barrel blocked by edge
+	EXPECT_FALSE(field3.doMove(moveRIGHT));
 }
