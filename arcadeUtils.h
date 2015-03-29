@@ -6,8 +6,13 @@
 #ifndef arcadeUtils_H
 #define arcadeUtils_H
 
-
+#include <map>
 #include <iostream>
+
+const std::map<const std::string, std::pair<int, int>> directions = 
+    {{"OMHOOG",{0,1}}, {"OMLAAG",{0,-1}}, {"LINKS",{-1,0}}, {"RECHTS",{1,0}}};
+
+bool isDirection(std::string direction);
 
 bool DirectoryExists(const std::string dirname);
 

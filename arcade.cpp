@@ -1,14 +1,9 @@
 #include <algorithm>
 #include <iostream>
+#include "arcadeUtils.h"
 #include "arcade.h"
+#include "playpieces.h"
 #include "DesignByContract.h"
-
-/**
-* helper functions
-**/
-bool isDirection(std::string direction) {
-    return directions.count(direction) != 0;
-}
 
 /**
 * Move
@@ -21,7 +16,7 @@ Move::Move() {
            "constructor must end in properlyInitialized state");
 }
 Move::Move(std::string playername, std::string direction) {
-    REQUIRE( isDirection(direction), "invalid direction");
+    REQUIRE(isDirection(direction), "invalid direction");
     _initCheck = this;
     this->playername = playername;
     this->direction = direction;
@@ -43,159 +38,6 @@ const std::string Move::getDirection() const {
     return this->direction;
 }
 
-/** 
-* Playpiece
-*/
-PlayPiece::PlayPiece() {
-    _initCheck = this;
-    x = 0;
-    y = 0;
-    movable = false;
-    ENSURE(properlyInitialized(),
-           "constructor must end in properlyInitialized state");
-
-}
-PlayPiece::PlayPiece(int x, int y, bool movable) {
-    REQUIRE(x >= 0 && y >= 0, "coordinates must be greater than zero");
-    _initCheck = this;
-    this->x = x;
-    this->y = y;
-    this->movable = movable;
-    ENSURE(properlyInitialized(),
-           "constructor must end in properlyInitialized state");
-
-}
-bool PlayPiece::properlyInitialized() const {
-    return this == _initCheck;
-}
-bool PlayPiece::isMovable() {
-    REQUIRE(this->properlyInitialized(), 
-	        "PlayPiece wasn't initialized when calling isMovable");
-    return this->movable;
-}
-int PlayPiece::getX() const{
-    REQUIRE(this->properlyInitialized(), 
-	        "PlayPiece wasn't initialized when calling getX");
-    return this->x;
-} 
-int PlayPiece::getY() const{
-    REQUIRE(this->properlyInitialized(), 
-	        "PlayPiece wasn't initialized when calling getY");
-    return this->y;
-} 
-void PlayPiece::setX(int x) {
-    REQUIRE(this->properlyInitialized(), 
-	        "PlayPiece wasn't initialized when calling setX");
-    this->x = x;
-}
-void PlayPiece::setY(int y) {
-    REQUIRE(this->properlyInitialized(), 
-	        "PlayPiece wasn't initialized when calling setY");
-    this->y = y;
-}
-
-/** 
-* Player
-**/
-Player::Player() {
-    _initCheck = this;
-    name = "";
-    x = 0;
-    y = 0;
-    movable = true;
-    ENSURE(properlyInitialized(),
-           "constructor must end in properlyInitialized state");
-}
-Player::Player(int x, int y, std::string name) {
-    REQUIRE(x >= 0 && y >= 0, "coordinates must be >= 0");
-    _initCheck = this;
-    this->name = name;
-    this->x = x;
-    this->y = y;
-    this->movable = true;
-    ENSURE(properlyInitialized(),
-           "constructor must end in properlyInitialized state");
-}
-bool Player::properlyInitialized() const {
-    return this == _initCheck;
-}
-std::string Player::getName() const{
-    REQUIRE(this->properlyInitialized(), 
-	        "Player wasn't initialized when calling getName");
-    return this->name;
-}
-void Player::setName(std::string name) {
-    REQUIRE(this->properlyInitialized(), 
-   	        "Player wasn't initialized when calling setName");
-    this->name = name;
-}
-/**
-* Obstacle
-**/
-Obstacle::Obstacle() {
-    _initCheck = this;
-    x = 0;
-    y = 0;
-    movable = false;
-    ENSURE(properlyInitialized(),
-           "constructor must end in properlyInitialized state");
-
-}
-bool Obstacle::properlyInitialized() const {
-    return this == _initCheck;
-}
-std::string Obstacle::getType(){
-	return type;
-}
-
-/**
-* Barrel
-**/
-Barrel::Barrel() {
-    _initCheck = this;
-    x = 0;
-    y = 0;
-    movable = true;
-	type = "ton";
-    ENSURE(properlyInitialized(),
-           "constructor must end in properlyInitialized state");
-
-}
-Barrel::Barrel(int x, int y,bool movable) {
-    REQUIRE(x >= 0 && y >= 0, "coordinates must be >= 0");
-    _initCheck = this;
-    this->x = x;
-    this->y = y;
-    this->movable = movable;
-	type = "ton";
-    ENSURE(properlyInitialized(),
-           "constructor must end in properlyInitialized state");
-
-}
-
-/**
-* Wall
-**/
-Wall::Wall() {
-    _initCheck = this;
-    x = 0;
-    y = 0;
-    movable = false;
-	type = "muur";
-    ENSURE(properlyInitialized(),
-           "constructor must end in properlyInitialized state");
-
-}
-Wall::Wall(int x, int y, bool movable) {
-    REQUIRE(x >= 0 && y >= 0, "coordinates must be >= 0");
-    _initCheck = this;
-    this->x = x;
-    this->y = y;
-    this->movable = movable;
-	type = "muur";
-    ENSURE(properlyInitialized(),
-           "constructor must end in properlyInitialized state");
-}
 
 /**
 * Field

@@ -4,10 +4,18 @@
 #include <iostream>
 #include <fstream>
 #include <sys/stat.h>
+#include "arcadeUtils.h"
 
 using namespace std;
 
-#include "arcadeUtils.h"
+
+/**
+* Verify if a direction is valid
+*/
+bool isDirection(std::string direction) {
+    return directions.count(direction) != 0;
+}
+
 
 /**
 Auxiliary functions for file manipulation.
